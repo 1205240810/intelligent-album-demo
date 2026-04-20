@@ -1,0 +1,24 @@
+<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="fallSky" x1="800" y1="0" x2="800" y2="900" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#96DBFF"/>
+      <stop offset="0.58" stop-color="#E7FBFF"/>
+      <stop offset="1" stop-color="#EEF4D6"/>
+    </linearGradient>
+    <linearGradient id="fallWater" x1="800" y1="210" x2="800" y2="870" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#D9F8FF"/>
+      <stop offset="0.35" stop-color="#7CC8FF"/>
+      <stop offset="1" stop-color="#135187"/>
+    </linearGradient>
+  </defs>
+  <rect width="1600" height="900" fill="url(#fallSky)"/>
+  <circle cx="1280" cy="160" r="80" fill="#FFF2A9"/>
+  <path d="M0 455C134 420 254 418 390 446C560 482 703 487 868 460C1034 432 1174 425 1600 458V900H0V455Z" fill="#5B7A4E"/>
+  <path d="M250 620L460 300L610 620H250Z" fill="#7D8B7E"/>
+  <path d="M980 620L1170 280L1365 620H980Z" fill="#738173"/>
+  <path d="M670 190H935L980 900H620L670 190Z" fill="url(#fallWater)"/>
+  <path d="M690 170C760 138 840 134 915 165V228H690V170Z" fill="#E0FCFF"/>
+  <ellipse cx="800" cy="760" rx="295" ry="65" fill="#8DD8FF" opacity="0.32"/>
+  <path d="M546 760C650 784 780 792 920 784C1040 777 1145 756 1240 732" stroke="#DDFBFF" stroke-width="12" stroke-linecap="round" opacity="0.7"/>
+  <path d="M0 740C240 708 450 710 675 742C902 775 1138 783 1384 752C1462 742 1534 733 1600 728" stroke="#E4F5DB" stroke-width="10" stroke-linecap="round" opacity="0.5"/>
+</svg>

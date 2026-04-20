@@ -1,0 +1,22 @@
+<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="lakeSky" x1="800" y1="0" x2="800" y2="900" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#A7D7FF"/>
+      <stop offset="0.58" stop-color="#DFF6FF"/>
+      <stop offset="1" stop-color="#F7ECD8"/>
+    </linearGradient>
+    <linearGradient id="lakeWater" x1="800" y1="480" x2="800" y2="900" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#59B6E9"/>
+      <stop offset="1" stop-color="#163C68"/>
+    </linearGradient>
+  </defs>
+  <rect width="1600" height="900" fill="url(#lakeSky)"/>
+  <circle cx="300" cy="160" r="78" fill="#FFF4B1"/>
+  <path d="M0 490C190 430 395 438 560 474C742 512 888 521 1050 486C1225 447 1370 430 1600 474V900H0V490Z" fill="#4E806A"/>
+  <path d="M0 545C140 512 252 508 390 528C560 552 692 559 835 540C980 522 1106 517 1268 541C1385 560 1493 560 1600 548V900H0V545Z" fill="url(#lakeWater)"/>
+  <path d="M90 448L310 250L520 448H90Z" fill="#6F8EA0"/>
+  <path d="M960 452L1230 218L1490 452H960Z" fill="#7890A5"/>
+  <path d="M1065 305L1230 218L1340 313L1200 286L1065 305Z" fill="#F5FAFF"/>
+  <ellipse cx="805" cy="623" rx="360" ry="50" fill="#A6E3FF" opacity="0.26"/>
+  <path d="M200 648C388 672 634 688 862 679C1098 670 1301 650 1470 625" stroke="#CFF6FF" stroke-width="10" stroke-linecap="round" opacity="0.72"/>
+</svg>

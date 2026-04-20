@@ -1,0 +1,33 @@
+<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="forestSky" x1="800" y1="0" x2="800" y2="900" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#A7E5B2"/>
+      <stop offset="0.62" stop-color="#E8F7D8"/>
+      <stop offset="1" stop-color="#FFF1D7"/>
+    </linearGradient>
+  </defs>
+  <rect width="1600" height="900" fill="url(#forestSky)"/>
+  <circle cx="1280" cy="170" r="82" fill="#FFF1AB"/>
+  <rect y="560" width="1600" height="340" fill="#295138"/>
+  <path d="M0 610C190 590 382 603 558 632C759 665 927 669 1118 638C1275 612 1433 597 1600 615V900H0V610Z" fill="#234330"/>
+  <g fill="#3C7E4E">
+    <path d="M95 670L180 455L265 670H95Z"/>
+    <path d="M235 670L335 405L435 670H235Z"/>
+    <path d="M425 670L530 370L635 670H425Z"/>
+    <path d="M615 670L715 430L815 670H615Z"/>
+    <path d="M820 670L925 390L1030 670H820Z"/>
+    <path d="M1045 670L1150 430L1255 670H1045Z"/>
+    <path d="M1255 670L1360 390L1465 670H1255Z"/>
+  </g>
+  <g fill="#6BC776">
+    <circle cx="195" cy="430" r="48"/>
+    <circle cx="333" cy="385" r="54"/>
+    <circle cx="530" cy="342" r="56"/>
+    <circle cx="714" cy="397" r="50"/>
+    <circle cx="924" cy="356" r="52"/>
+    <circle cx="1148" cy="399" r="48"/>
+    <circle cx="1360" cy="352" r="54"/>
+  </g>
+  <rect x="850" y="590" width="180" height="125" rx="40" fill="#1B3627"/>
+  <path d="M0 735C252 696 459 696 678 731C913 768 1130 772 1365 735C1443 723 1522 714 1600 713V900H0V735Z" fill="#1B3124"/>
+</svg>

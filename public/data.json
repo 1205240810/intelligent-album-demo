@@ -1,0 +1,442 @@
+[
+  {
+    "id": 1,
+    "url": "/images/mountain.svg",
+    "type": "山景",
+    "time": "白天",
+    "season": "春",
+    "features": {
+      "color_score": 0.86,
+      "texture_complexity": 0.55
+    }
+  },
+  {
+    "id": 2,
+    "url": "/images/mountain.svg",
+    "type": "山景",
+    "time": "白天",
+    "season": "夏",
+    "features": {
+      "color_score": 0.89,
+      "texture_complexity": 0.57
+    }
+  },
+  {
+    "id": 3,
+    "url": "/images/mountain.svg",
+    "type": "山景",
+    "time": "黑夜",
+    "season": "秋",
+    "features": {
+      "color_score": 0.8,
+      "texture_complexity": 0.64
+    }
+  },
+  {
+    "id": 4,
+    "url": "/images/mountain.svg",
+    "type": "山景",
+    "time": "白天",
+    "season": "冬",
+    "features": {
+      "color_score": 0.78,
+      "texture_complexity": 0.62
+    }
+  },
+  {
+    "id": 5,
+    "url": "/images/seascape.svg",
+    "type": "海景",
+    "time": "白天",
+    "season": "春",
+    "features": {
+      "color_score": 0.93,
+      "texture_complexity": 0.28
+    }
+  },
+  {
+    "id": 6,
+    "url": "/images/seascape.svg",
+    "type": "海景",
+    "time": "白天",
+    "season": "夏",
+    "features": {
+      "color_score": 0.96,
+      "texture_complexity": 0.3
+    }
+  },
+  {
+    "id": 7,
+    "url": "/images/seascape.svg",
+    "type": "海景",
+    "time": "黑夜",
+    "season": "秋",
+    "features": {
+      "color_score": 0.87,
+      "texture_complexity": 0.37
+    }
+  },
+  {
+    "id": 8,
+    "url": "/images/seascape.svg",
+    "type": "海景",
+    "time": "白天",
+    "season": "冬",
+    "features": {
+      "color_score": 0.85,
+      "texture_complexity": 0.35
+    }
+  },
+  {
+    "id": 9,
+    "url": "/images/lake.svg",
+    "type": "河湖景观",
+    "time": "白天",
+    "season": "春",
+    "features": {
+      "color_score": 0.81,
+      "texture_complexity": 0.39
+    }
+  },
+  {
+    "id": 10,
+    "url": "/images/lake.svg",
+    "type": "河湖景观",
+    "time": "白天",
+    "season": "夏",
+    "features": {
+      "color_score": 0.84,
+      "texture_complexity": 0.41
+    }
+  },
+  {
+    "id": 11,
+    "url": "/images/lake.svg",
+    "type": "河湖景观",
+    "time": "黑夜",
+    "season": "秋",
+    "features": {
+      "color_score": 0.75,
+      "texture_complexity": 0.48
+    }
+  },
+  {
+    "id": 12,
+    "url": "/images/lake.svg",
+    "type": "河湖景观",
+    "time": "白天",
+    "season": "冬",
+    "features": {
+      "color_score": 0.73,
+      "texture_complexity": 0.46
+    }
+  },
+  {
+    "id": 13,
+    "url": "/images/forest.svg",
+    "type": "森林绿植",
+    "time": "白天",
+    "season": "春",
+    "features": {
+      "color_score": 0.9,
+      "texture_complexity": 0.61
+    }
+  },
+  {
+    "id": 14,
+    "url": "/images/forest.svg",
+    "type": "森林绿植",
+    "time": "白天",
+    "season": "夏",
+    "features": {
+      "color_score": 0.93,
+      "texture_complexity": 0.63
+    }
+  },
+  {
+    "id": 15,
+    "url": "/images/forest.svg",
+    "type": "森林绿植",
+    "time": "黑夜",
+    "season": "秋",
+    "features": {
+      "color_score": 0.84,
+      "texture_complexity": 0.7
+    }
+  },
+  {
+    "id": 16,
+    "url": "/images/forest.svg",
+    "type": "森林绿植",
+    "time": "白天",
+    "season": "冬",
+    "features": {
+      "color_score": 0.82,
+      "texture_complexity": 0.68
+    }
+  },
+  {
+    "id": 17,
+    "url": "/images/town.svg",
+    "type": "古镇小镇",
+    "time": "白天",
+    "season": "春",
+    "features": {
+      "color_score": 0.75,
+      "texture_complexity": 0.51
+    }
+  },
+  {
+    "id": 18,
+    "url": "/images/town.svg",
+    "type": "古镇小镇",
+    "time": "白天",
+    "season": "夏",
+    "features": {
+      "color_score": 0.78,
+      "texture_complexity": 0.53
+    }
+  },
+  {
+    "id": 19,
+    "url": "/images/town.svg",
+    "type": "古镇小镇",
+    "time": "黑夜",
+    "season": "秋",
+    "features": {
+      "color_score": 0.69,
+      "texture_complexity": 0.6
+    }
+  },
+  {
+    "id": 20,
+    "url": "/images/town.svg",
+    "type": "古镇小镇",
+    "time": "白天",
+    "season": "冬",
+    "features": {
+      "color_score": 0.67,
+      "texture_complexity": 0.58
+    }
+  },
+  {
+    "id": 21,
+    "url": "/images/city.svg",
+    "type": "现代化大都市",
+    "time": "白天",
+    "season": "春",
+    "features": {
+      "color_score": 0.78,
+      "texture_complexity": 0.64
+    }
+  },
+  {
+    "id": 22,
+    "url": "/images/city.svg",
+    "type": "现代化大都市",
+    "time": "白天",
+    "season": "夏",
+    "features": {
+      "color_score": 0.81,
+      "texture_complexity": 0.66
+    }
+  },
+  {
+    "id": 23,
+    "url": "/images/city.svg",
+    "type": "现代化大都市",
+    "time": "黑夜",
+    "season": "秋",
+    "features": {
+      "color_score": 0.72,
+      "texture_complexity": 0.73
+    }
+  },
+  {
+    "id": 24,
+    "url": "/images/city.svg",
+    "type": "现代化大都市",
+    "time": "白天",
+    "season": "冬",
+    "features": {
+      "color_score": 0.7,
+      "texture_complexity": 0.71
+    }
+  },
+  {
+    "id": 25,
+    "url": "/images/village.svg",
+    "type": "乡村田园",
+    "time": "白天",
+    "season": "春",
+    "features": {
+      "color_score": 0.84,
+      "texture_complexity": 0.34
+    }
+  },
+  {
+    "id": 26,
+    "url": "/images/village.svg",
+    "type": "乡村田园",
+    "time": "白天",
+    "season": "夏",
+    "features": {
+      "color_score": 0.87,
+      "texture_complexity": 0.36
+    }
+  },
+  {
+    "id": 27,
+    "url": "/images/village.svg",
+    "type": "乡村田园",
+    "time": "黑夜",
+    "season": "秋",
+    "features": {
+      "color_score": 0.78,
+      "texture_complexity": 0.43
+    }
+  },
+  {
+    "id": 28,
+    "url": "/images/village.svg",
+    "type": "乡村田园",
+    "time": "白天",
+    "season": "冬",
+    "features": {
+      "color_score": 0.76,
+      "texture_complexity": 0.41
+    }
+  },
+  {
+    "id": 29,
+    "url": "/images/glacier.svg",
+    "type": "雪山冰川",
+    "time": "白天",
+    "season": "春",
+    "features": {
+      "color_score": 0.7,
+      "texture_complexity": 0.46
+    }
+  },
+  {
+    "id": 30,
+    "url": "/images/glacier.svg",
+    "type": "雪山冰川",
+    "time": "白天",
+    "season": "夏",
+    "features": {
+      "color_score": 0.73,
+      "texture_complexity": 0.48
+    }
+  },
+  {
+    "id": 31,
+    "url": "/images/glacier.svg",
+    "type": "雪山冰川",
+    "time": "黑夜",
+    "season": "秋",
+    "features": {
+      "color_score": 0.64,
+      "texture_complexity": 0.55
+    }
+  },
+  {
+    "id": 32,
+    "url": "/images/glacier.svg",
+    "type": "雪山冰川",
+    "time": "白天",
+    "season": "冬",
+    "features": {
+      "color_score": 0.62,
+      "texture_complexity": 0.53
+    }
+  },
+  {
+    "id": 33,
+    "url": "/images/waterfall.svg",
+    "type": "瀑布溪流",
+    "time": "白天",
+    "season": "春",
+    "features": {
+      "color_score": 0.88,
+      "texture_complexity": 0.59
+    }
+  },
+  {
+    "id": 34,
+    "url": "/images/waterfall.svg",
+    "type": "瀑布溪流",
+    "time": "白天",
+    "season": "夏",
+    "features": {
+      "color_score": 0.91,
+      "texture_complexity": 0.61
+    }
+  },
+  {
+    "id": 35,
+    "url": "/images/waterfall.svg",
+    "type": "瀑布溪流",
+    "time": "黑夜",
+    "season": "秋",
+    "features": {
+      "color_score": 0.82,
+      "texture_complexity": 0.68
+    }
+  },
+  {
+    "id": 36,
+    "url": "/images/waterfall.svg",
+    "type": "瀑布溪流",
+    "time": "白天",
+    "season": "冬",
+    "features": {
+      "color_score": 0.8,
+      "texture_complexity": 0.66
+    }
+  },
+  {
+    "id": 37,
+    "url": "/images/heritage.svg",
+    "type": "历史古迹",
+    "time": "白天",
+    "season": "春",
+    "features": {
+      "color_score": 0.73,
+      "texture_complexity": 0.54
+    }
+  },
+  {
+    "id": 38,
+    "url": "/images/heritage.svg",
+    "type": "历史古迹",
+    "time": "白天",
+    "season": "夏",
+    "features": {
+      "color_score": 0.76,
+      "texture_complexity": 0.56
+    }
+  },
+  {
+    "id": 39,
+    "url": "/images/heritage.svg",
+    "type": "历史古迹",
+    "time": "黑夜",
+    "season": "秋",
+    "features": {
+      "color_score": 0.67,
+      "texture_complexity": 0.63
+    }
+  },
+  {
+    "id": 40,
+    "url": "/images/heritage.svg",
+    "type": "历史古迹",
+    "time": "白天",
+    "season": "冬",
+    "features": {
+      "color_score": 0.65,
+      "texture_complexity": 0.61
+    }
+  }
+]

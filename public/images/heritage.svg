@@ -1,0 +1,21 @@
+<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="heritageSky" x1="800" y1="0" x2="800" y2="900" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#5677B9"/>
+      <stop offset="0.48" stop-color="#F7B677"/>
+      <stop offset="1" stop-color="#F7E1B5"/>
+    </linearGradient>
+  </defs>
+  <rect width="1600" height="900" fill="url(#heritageSky)"/>
+  <circle cx="1120" cy="175" r="92" fill="#FFD58E" opacity="0.92"/>
+  <path d="M0 560C182 530 335 532 500 563C710 603 897 609 1092 578C1258 551 1404 543 1600 565V900H0V560Z" fill="#9B6D47"/>
+  <path d="M0 650C162 624 293 623 432 649C611 682 760 689 924 663C1112 633 1266 626 1600 650V900H0V650Z" fill="#7A5437"/>
+  <rect x="375" y="365" width="850" height="46" fill="#D8B18A"/>
+  <rect x="420" y="411" width="760" height="225" fill="#C79A70"/>
+  <rect x="500" y="430" width="92" height="206" fill="#8D6042"/>
+  <rect x="724" y="430" width="92" height="206" fill="#8D6042"/>
+  <rect x="948" y="430" width="92" height="206" fill="#8D6042"/>
+  <path d="M330 365L800 220L1270 365H330Z" fill="#8F5F3B"/>
+  <path d="M430 635H1175V680H430V635Z" fill="#6F472F"/>
+  <path d="M220 735C448 705 646 707 845 736C1024 762 1207 766 1398 742C1474 733 1542 724 1600 717" stroke="#F8D39F" stroke-width="10" stroke-linecap="round" opacity="0.48"/>
+</svg>

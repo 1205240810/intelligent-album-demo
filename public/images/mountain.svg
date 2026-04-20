@@ -1,0 +1,22 @@
+<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="sky" x1="800" y1="0" x2="800" y2="900" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#83C8FF"/>
+      <stop offset="1" stop-color="#FFF0C7"/>
+    </linearGradient>
+    <linearGradient id="lake" x1="800" y1="520" x2="800" y2="900" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#6AC6FF"/>
+      <stop offset="1" stop-color="#0B3A61"/>
+    </linearGradient>
+  </defs>
+  <rect width="1600" height="900" fill="url(#sky)"/>
+  <circle cx="1250" cy="175" r="80" fill="#FFE597"/>
+  <path d="M0 575C170 520 290 540 445 585C600 630 760 640 930 595C1095 552 1290 504 1600 548V900H0V575Z" fill="#3B6B5F"/>
+  <path d="M85 600L450 210L780 600H85Z" fill="#5D7D6D"/>
+  <path d="M430 600L820 140L1175 600H430Z" fill="#355A68"/>
+  <path d="M910 600L1200 250L1500 600H910Z" fill="#274B61"/>
+  <path d="M610 260L820 140L910 260L760 230L610 260Z" fill="#F6FBFF"/>
+  <path d="M1040 350L1200 250L1290 360L1165 322L1040 350Z" fill="#E9F3FF"/>
+  <path d="M0 620C205 655 450 690 730 692C1030 694 1320 658 1600 612V900H0V620Z" fill="url(#lake)"/>
+  <path d="M0 690C240 722 500 742 772 738C1060 734 1310 710 1600 668" stroke="#D8F4FF" stroke-width="12" stroke-linecap="round" opacity="0.5"/>
+</svg>

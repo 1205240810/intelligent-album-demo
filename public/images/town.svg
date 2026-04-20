@@ -1,0 +1,31 @@
+<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="townSky" x1="800" y1="0" x2="800" y2="900" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#8AC5FF"/>
+      <stop offset="0.64" stop-color="#FCEAC5"/>
+      <stop offset="1" stop-color="#F8D8B3"/>
+    </linearGradient>
+  </defs>
+  <rect width="1600" height="900" fill="url(#townSky)"/>
+  <circle cx="1240" cy="145" r="74" fill="#FFF0A1"/>
+  <rect y="620" width="1600" height="280" fill="#9A6C4E"/>
+  <path d="M0 585C186 560 350 563 520 590C730 624 908 630 1090 602C1270 575 1415 562 1600 580V900H0V585Z" fill="#B4825F"/>
+  <rect x="140" y="455" width="180" height="210" fill="#D7B08A"/>
+  <path d="M120 455L230 365L340 455H120Z" fill="#8C4F38"/>
+  <rect x="365" y="410" width="150" height="255" fill="#E4C09A"/>
+  <path d="M345 410L440 320L535 410H345Z" fill="#AF6649"/>
+  <rect x="545" y="330" width="105" height="335" fill="#D8B48E"/>
+  <path d="M530 330L598 245L665 330H530Z" fill="#804431"/>
+  <rect x="705" y="435" width="210" height="230" fill="#E2BE97"/>
+  <path d="M675 435L810 350L945 435H675Z" fill="#9D5D44"/>
+  <rect x="960" y="395" width="175" height="270" fill="#D9AF89"/>
+  <path d="M938 395L1048 308L1158 395H938Z" fill="#8C4F38"/>
+  <rect x="1165" y="450" width="220" height="215" fill="#E3BF98"/>
+  <path d="M1145 450L1275 350L1405 450H1145Z" fill="#AB664A"/>
+  <g fill="#7B4937">
+    <rect x="200" y="540" width="36" height="125"/>
+    <rect x="425" y="535" width="32" height="130"/>
+    <rect x="785" y="550" width="44" height="115"/>
+    <rect x="1230" y="555" width="40" height="110"/>
+  </g>
+</svg>

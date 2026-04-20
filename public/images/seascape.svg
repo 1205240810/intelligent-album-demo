@@ -1,0 +1,21 @@
+<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="seaSky" x1="800" y1="0" x2="800" y2="900" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#8FE7FF"/>
+      <stop offset="0.6" stop-color="#D7F2FF"/>
+      <stop offset="1" stop-color="#FFF2D8"/>
+    </linearGradient>
+    <linearGradient id="water" x1="800" y1="420" x2="800" y2="900" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#2AB7FF"/>
+      <stop offset="1" stop-color="#004F8A"/>
+    </linearGradient>
+  </defs>
+  <rect width="1600" height="900" fill="url(#seaSky)"/>
+  <circle cx="1180" cy="175" r="92" fill="#FFE39B"/>
+  <path d="M0 455C183 430 296 435 470 462C685 495 910 518 1125 490C1294 468 1432 447 1600 458V900H0V455Z" fill="url(#water)"/>
+  <path d="M0 525C120 495 218 497 335 525C468 558 575 561 705 531C856 496 962 498 1082 529C1210 563 1328 566 1452 538C1510 525 1560 520 1600 525" stroke="#B8F1FF" stroke-width="12" stroke-linecap="round"/>
+  <path d="M0 615C126 589 238 588 366 614C513 645 628 648 772 615C913 583 1046 584 1186 615C1323 645 1455 650 1600 616" stroke="#7BE7FF" stroke-width="14" stroke-linecap="round" opacity="0.75"/>
+  <path d="M0 720C170 690 295 695 447 724C587 751 710 752 860 724C1015 695 1146 694 1298 721C1417 743 1513 745 1600 732" stroke="#E0FBFF" stroke-width="10" stroke-linecap="round" opacity="0.6"/>
+  <path d="M320 500C370 468 430 468 480 500C430 530 370 530 320 500Z" fill="#FFF4D2" opacity="0.85"/>
+  <path d="M1290 520C1320 488 1368 484 1410 508C1372 531 1330 537 1290 520Z" fill="#FFF4D2" opacity="0.8"/>
+</svg>

@@ -1,0 +1,22 @@
+<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="glacierSky" x1="800" y1="0" x2="800" y2="900" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#A0D7FF"/>
+      <stop offset="0.5" stop-color="#D8F5FF"/>
+      <stop offset="1" stop-color="#EAF7FF"/>
+    </linearGradient>
+    <linearGradient id="iceWater" x1="800" y1="560" x2="800" y2="900" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#67BFFF"/>
+      <stop offset="1" stop-color="#144A83"/>
+    </linearGradient>
+  </defs>
+  <rect width="1600" height="900" fill="url(#glacierSky)"/>
+  <path d="M0 575C202 527 401 526 587 558C765 588 922 593 1095 567C1270 541 1434 534 1600 552V900H0V575Z" fill="#9CC4D8"/>
+  <path d="M95 600L410 230L690 600H95Z" fill="#B9D8EA"/>
+  <path d="M430 600L840 120L1170 600H430Z" fill="#88B0CC"/>
+  <path d="M1020 600L1280 270L1520 600H1020Z" fill="#789BB5"/>
+  <path d="M650 255L840 120L960 270L803 230L650 255Z" fill="#F9FDFF"/>
+  <path d="M1145 360L1280 270L1380 364L1255 332L1145 360Z" fill="#EDF7FF"/>
+  <path d="M0 625C272 664 516 682 779 680C1039 678 1318 656 1600 615V900H0V625Z" fill="url(#iceWater)"/>
+  <path d="M220 720C470 744 720 754 958 744C1150 736 1315 719 1440 700" stroke="#E2FAFF" stroke-width="12" stroke-linecap="round" opacity="0.7"/>
+</svg>
