@@ -1,4 +1,5 @@
 import { ArrowUpRight, ImageOff } from 'lucide-react';
+import ScenicImage from './ScenicImage';
 
 function FeatureBadge({ label, value }) {
   return (
@@ -52,11 +53,12 @@ export default function ImageGrid({ photos, selectedPhotoId, onSelect }) {
               </span>
             </div>
 
-            <img
+            <ScenicImage
               src={photo.url}
               alt={`${photo.type} ${photo.time} ${photo.season}`}
-              loading="lazy"
               className="h-56 w-full object-cover transition-transform duration-700 group-hover:scale-105"
+              fallbackTitle={`${photo.type} 图片不可用`}
+              fallbackSubtitle="请确认图片路径正确，或将资源放入 public/images 后重新引用。"
             />
 
             <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-slate-950 via-slate-950/[0.88] to-transparent p-4 pt-14">

@@ -7,6 +7,17 @@ import {
 import { generateMockPhotos } from './mockData';
 
 const fallbackByIndex = (items, index) => items[index % items.length];
+const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
+
+function normalizeFeatureScore(value) {
+  const numericValue = Number(value);
+
+  if (!Number.isFinite(numericValue)) {
+    return 0.5;
+  }
+
+  return Number(clamp(numericValue, 0, 1).toFixed(2));
+}
 
 function normalizePhoto(photo, index) {
   const fallbackType = fallbackByIndex(TYPE_ORDER, index);
@@ -15,9 +26,10 @@ function normalizePhoto(photo, index) {
   const season = SEASON_ORDER.includes(photo?.season)
     ? photo.season
     : fallbackByIndex(SEASON_ORDER, index);
+  const numericId = Number(photo?.id);
 
   return {
-    id: Number(photo?.id ?? index + 1),
+    id: Number.isFinite(numericId) ? numericId : index + 1,
     url:
       typeof photo?.url === 'string' && photo.url.trim()
         ? photo.url
@@ -26,8 +38,8 @@ function normalizePhoto(photo, index) {
     time,
     season,
     features: {
-      color_score: Number(photo?.features?.color_score ?? 0.5),
-      texture_complexity: Number(photo?.features?.texture_complexity ?? 0.5),
+      color_score: normalizeFeatureScore(photo?.features?.color_score),
+      texture_complexity: normalizeFeatureScore(photo?.features?.texture_complexity),
     },
   };
 }

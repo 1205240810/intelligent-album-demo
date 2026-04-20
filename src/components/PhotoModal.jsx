@@ -1,5 +1,6 @@
 import { X } from 'lucide-react';
 import { useEffect } from 'react';
+import ScenicImage from './ScenicImage';
 
 function DetailRow({ label, value }) {
   return (
@@ -56,10 +57,13 @@ export default function PhotoModal({ photo, onClose }) {
 
         <div className="grid lg:grid-cols-[1.15fr_0.85fr]">
           <div className="relative min-h-[320px] bg-slate-950">
-            <img
+            <ScenicImage
               src={photo.url}
               alt={`${photo.type} ${photo.time} ${photo.season}`}
               className="h-full w-full object-cover"
+              loading="eager"
+              fallbackTitle="预览图加载失败"
+              fallbackSubtitle="可以关闭弹窗后检查 data.json 中的 url 字段。"
             />
             <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-slate-950 to-transparent p-6">
               <div className="label-pill">Photo Insight</div>

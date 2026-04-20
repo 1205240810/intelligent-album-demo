@@ -9,6 +9,7 @@ import {
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import Dashboard from './components/Dashboard';
+import DataGuide from './components/DataGuide';
 import FilterBar from './components/FilterBar';
 import ImageGrid from './components/ImageGrid';
 import PhotoModal from './components/PhotoModal';
@@ -244,6 +245,8 @@ export default function App() {
             />
           )}
         </section>
+
+        <DataGuide />
       </div>
 
       <PhotoModal photo={selectedPhoto} onClose={() => setSelectedPhoto(null)} />
