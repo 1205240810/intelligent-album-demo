@@ -1,14 +1,32 @@
 # 数据与图片接入说明
 
-这份文档用于给队友说明后续如何替换数据和图片，而不需要修改前端页面逻辑。
+这份文档说明如何替换数据和图片，而不需要改页面组件。
 
-## 1. 数据文件位置
+## 数据位置
 
-- 项目运行时默认读取 `public/data.json`
-- 如果这个文件缺失、为空或 JSON 格式不正确，系统会自动切换到内置 Mock 数据
-- 因此正式演示前，请务必检查 `public/data.json` 是否已替换为真实数据
+- 原始照片库：`data/raw/photo-album-test/`
+- 生成后的展示图片：`frontend/public/images/real/`
+- 生成后的 JSON：`frontend/public/data.json`
+- 前端数据模板：`frontend/public/data.template.json`
+- 后端运行态相册：`backend/photo_album/users/`
 
-## 2. JSON 结构要求
+`data/raw/` 和后端运行态目录默认不提交 Git；`frontend/public/images/real/` 与 `frontend/public/data.json` 是可展示、可部署的数据。
+
+## 生成流程
+
+```bash
+npm run generate:data
+```
+
+脚本位置：
+
+```text
+frontend/scripts/generate_real_dataset.py
+```
+
+脚本会读取 `data/raw/photo-album-test/` 和 `backend/photo_album/users/`，按文件哈希去重，压缩并去除 EXIF 后写入 `frontend/public/images/real/`，同时生成 `frontend/public/data.json`。
+
+## JSON 结构
 
 推荐结构如下：
 
@@ -16,7 +34,7 @@
 [
   {
     "id": 1,
-    "url": "/images/mountain.jpg",
+    "url": "/images/real/photo-001.jpg",
     "type": "山景",
     "time": "白天",
     "season": "春",
@@ -28,22 +46,21 @@
 ]
 ```
 
-## 3. 字段说明
+## 字段说明
 
 | 字段 | 类型 | 是否必填 | 说明 |
 | --- | --- | --- | --- |
-| `id` | `number` | 是 | 照片唯一编号，建议不要重复 |
+| `id` | `number` / `string` | 是 | 照片唯一编号，建议不要重复 |
 | `url` | `string` | 是 | 图片地址，可写本地路径或完整网络链接 |
 | `type` | `string` | 是 | 景点类型 |
 | `time` | `string` | 是 | 拍摄时段，建议 `白天` 或 `黑夜` |
 | `season` | `string` | 是 | 季节标签，建议 `春`、`夏`、`秋`、`冬` |
-| `features` | `object` | 是 | 图像特征对象 |
 | `features.color_score` | `number` | 是 | 色彩分值，建议范围 `0` 到 `1` |
 | `features.texture_complexity` | `number` | 是 | 纹理复杂度，建议范围 `0` 到 `1` |
 
-## 4. 可用枚举值
+## 可用枚举
 
-### 景点类型 `type`
+景点类型：
 
 - `山景`
 - `海景`
@@ -56,84 +73,58 @@
 - `瀑布溪流`
 - `历史古迹`
 
-### 时段 `time`
+时段：
 
 - `白天`
 - `黑夜`
 
-### 季节 `season`
+季节：
 
 - `春`
 - `夏`
 - `秋`
 - `冬`
 
-## 5. 图片资源要求
+## 参数如何决定
 
-### 推荐格式
+- `time`：优先使用文件名中的 `IMG_YYYYMMDD_HHMMSS`，其次使用 EXIF 拍摄时间；`6:00` 到 `18:00` 之间为 `白天`，其他为 `黑夜`
+- `season`：由拍摄月份映射，`3-5` 为春，`6-8` 为夏，`9-11` 为秋，`12-2` 为冬
+- `type`：静态生成脚本根据 HSV 颜色占比、亮度、暗部比例和边缘强度做轻量推断；后端真实流程会结合 EXIF、GPS 地址反查、关键词映射和已有元数据
+- `color_score`：由饱和度、亮度、暗部比例综合估算
+- `texture_complexity`：由灰度边缘强度估算
 
-- `jpg`
-- `png`
-- `webp`
-- `svg`
+这些规则适合演示和兜底；如果后端后续接入更正式的图像识别模型，只要输出同样字段，前端不用改。
 
-### 推荐做法
+## 图片资源要求
 
-- 所有本地图片统一放入 `public/images/`
-- `data.json` 中通过 `"/images/文件名.jpg"` 形式引用
-- 文件名尽量只用英文、数字、连字符，不要带空格
-- 图片比例尽量统一为 `4:3` 或 `16:9`
-- 宽度建议不低于 `1200px`
+- 推荐格式：`jpg`、`png`、`webp`
+- 推荐比例：`4:3` 或 `16:9`
+- 推荐尺寸：宽度不低于 `1200px`
+- 推荐命名：英文、数字、连字符，避免空格
+- 本地展示路径：`/images/real/文件名.jpg`
 
-## 6. 本地路径示例
+页面会根据 Vite `base` 将 `/images/...` 归一化为当前部署位置下的资源地址，支持子目录部署和 `file://` 预览。
 
-如果图片文件是：
+## 静态交付
 
-```text
-public/images/west-lake-01.jpg
+```bash
+npm run build
 ```
 
-那么 `data.json` 里应写成：
+构建结果在 `frontend/dist/`。构建脚本会把当前 `frontend/public/data.json` 内嵌到 `dist/index.html`，所以只复制 `frontend/dist/` 也能离线查看当前数据版本。
 
-```json
-{
-  "url": "/images/west-lake-01.jpg"
-}
-```
-
-## 7. 网络图片示例
-
-如果使用图床，也可以直接写完整链接：
-
-```json
-{
-  "url": "https://example.com/images/west-lake-01.jpg"
-}
-```
-
-## 8. 更新流程
-
-1. 准备图片资源并放到 `public/images/`
-2. 按约定结构修改 `public/data.json`
-3. 本地运行检查页面显示是否正常
-4. 提交到 GitHub
-5. 等待 Vercel 自动部署完成
-
-## 9. 常见问题
+## 常见问题
 
 ### 图片不显示
 
-优先检查以下几项：
-
-- `url` 路径是否写错
-- 图片文件是否真的在 `public/images/` 目录下
-- 文件名大小写是否一致
-- 图片是否被误删或未提交到 GitHub
+- 检查 `url` 路径是否写成 `/images/real/...`
+- 检查图片是否在 `frontend/public/images/real/`
+- 检查文件名大小写是否一致
+- 检查图片是否提交到 GitHub
 
 ### 图表数据不对
 
-优先检查以下几项：
-
-- `type`、`time`、`season` 是否用了约定值
-- `features` 是否缺字段
-- `color_score` 和 `texture_complexity` 是否写成了数字
+- 检查 `type`、`time`、`season` 是否使用约定值
+- 检查 `features` 是否缺字段
+- 检查 `color_score` 和 `texture_complexity` 是否为数字
+- 重新运行 `npm run generate:data`

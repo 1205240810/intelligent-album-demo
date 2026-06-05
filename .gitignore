@@ -1,5 +1,7 @@
 node_modules/
+frontend/node_modules/
 dist/
+frontend/dist/
 .vercel/
 .DS_Store
 *.log
@@ -7,3 +9,15 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
+
+# Local-only sources, generated reports, and runtime state.
+/assets/
+/output/
+/data/raw/
+backend/photo_album/.idea/
+backend/photo_album/.venv/
+backend/photo_album/__pycache__/
+backend/photo_album/data/*
+!backend/photo_album/data/.gitkeep
+backend/photo_album/users/*
+!backend/photo_album/users/.gitkeep

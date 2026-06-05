@@ -1,105 +1,142 @@
-# Intelligent Album Demo
+# 智能相册分析系统
 
-旅游景点智能相册前端演示系统，基于 React + Vite + Tailwind CSS + ECharts，面向课程大作业的前端展示与交互演示。
+一个面向真实照片库的智能相册分析演示：前端负责筛选、图表和证据展示，后端负责照片上传、元数据解析、地图反查、统计和统一 API 输出。项目已整理为前端、后端、数据三块，方便组员分工和部署。
 
 ## 在线地址
 
 - GitHub 仓库: [1205240810/intelligent-album-demo](https://github.com/1205240810/intelligent-album-demo)
-- Vercel 演示: [intelligent-album-demo.vercel.app](https://intelligent-album-demo.vercel.app)
+- Vercel 预览: [intelligent-album-demo.vercel.app](https://intelligent-album-demo.vercel.app)
 
-## 当前功能
-
-- 三级过滤控制栏: 支持景点类型、时段、季节三维筛选，采用“且”逻辑实时联动。
-- 实时统计看板: 包含景点分布饼图、昼夜对比柱状图、季节分布柱状图。
-- 照片展示网格: 支持延迟加载、空状态提示、图片点击查看详情。
-- 图片属性弹窗: 展示类型、时段、季节、色彩分值、纹理复杂度。
-- 数据兜底机制: 优先读取 `public/data.json`，异常时自动切换到内置 Mock 数据。
-- 图片错误兜底: 当图片路径失效时，页面会显示加载失败提示，便于排查数据问题。
-
-## 项目结构
+## 目录结构
 
 ```text
 .
-├── public/
-│   ├── data.json
-│   └── images/
-├── src/
-│   ├── components/
-│   ├── constants/
-│   └── lib/
-├── docs/
-│   └── DATA_AND_IMAGE_SPEC.md
-└── README.md
+├── frontend/                  # React + Vite 前端展示系统
+│   ├── src/                   # 页面、组件、图表、数据归一化逻辑
+│   ├── public/data.json       # 前端默认读取的照片分析数据
+│   ├── public/images/real/    # 可提交的压缩脱敏展示图片
+│   └── scripts/               # 数据生成与离线打包脚本
+├── backend/photo_album/        # Flask 后端服务
+│   ├── app.py                 # 服务入口、CORS、Blueprint 注册
+│   ├── routes.py              # 上传、删除、统计、/api/photos、/media
+│   ├── image_analyzer.py      # EXIF、GPS、季节、时段、景点类型分析
+│   ├── data/                  # 后端运行统计文件，本地生成，默认不提交
+│   └── users/                 # 后端运行态用户相册，本地生成，默认不提交
+├── data/raw/                  # 原始照片库，本地保留，默认不提交
+├── docs/                      # 接口、数据格式和 PRD 文档
+├── package.json               # 根目录统一命令入口
+└── vercel.json                # Vercel 从 frontend/ 构建
 ```
 
-## 本地运行
+## 快速运行前端
+
+首次安装依赖：
 
 ```bash
-npm install
+npm install --prefix frontend
+```
+
+启动开发服务：
+
+```bash
 npm run dev
 ```
 
-本地开发地址默认是 `http://127.0.0.1:5173/`。
+默认地址是 `http://127.0.0.1:5173/`。页面顶部有分析和照片证据库，底部有“项目展示”区，适合分享给组员看目录、数据流和常用命令。
 
-## 生产构建
+## 快速运行后端
+
+进入后端虚拟环境后安装依赖：
+
+```bash
+python3 -m venv backend/photo_album/.venv
+backend/photo_album/.venv/bin/pip install -r backend/photo_album/requirements.txt
+```
+
+启动 Flask：
+
+```bash
+npm run backend:dev
+```
+
+后端默认监听 `http://127.0.0.1:8080/`。百度地图 AK 不是必需项，未配置时服务仍可启动；需要 GPS 地址反查时再配置：
+
+```bash
+export BAIDU_AK=你的百度地图AK
+```
+
+## 前后端联调
+
+在 `frontend/.env.local` 写入：
+
+```bash
+VITE_PHOTO_DATA_API_URL=http://127.0.0.1:8080/api/photos?username=张三&album_name=我的照片
+```
+
+前端数据加载顺序：
+
+1. 优先读取 `VITE_PHOTO_DATA_API_URL`
+2. 接口不可用时读取 `frontend/public/data.json`
+3. 文件也不可用时才使用临时样本
+4. 接口返回 `photos: []` 会展示真实空状态，不会伪装成回退成功
+
+主要接口：
+
+```http
+GET /api/photos?username=张三&album_name=我的照片
+GET /media/<safe-path>
+```
+
+## 数据更新
+
+原始照片放在：
+
+```text
+data/raw/photo-album-test/
+```
+
+然后运行：
+
+```bash
+npm run generate:data
+```
+
+脚本会读取原始库和后端本地相册，去重后输出：
+
+- `frontend/public/images/real/*.jpg`
+- `frontend/public/data.json`
+
+当前生成逻辑会尽量使用照片文件名和 EXIF 时间判断季节、白天/黑夜；图像特征使用 HSV 饱和度、亮度、暗部比例和边缘强度估算。后端接入真实上传流程时，会额外使用 `image_analyzer.py` 做 EXIF、GPS、百度地图地址反查和景点类型映射。
+
+## 静态打包分享
 
 ```bash
 npm run build
 ```
 
-## 数据接入方式
+构建产物在 `frontend/dist/`。打包时已配置相对资源路径，并把 `data.json` 内嵌进 `index.html`，所以把整个 `frontend/dist/` 文件夹拷到别的电脑后可以直接打开查看。只有在需要实时读取 Flask 接口时，才需要在那台电脑额外启动后端。
 
-- 运行时默认读取 `public/data.json`
-- 如果 `public/data.json` 缺失、为空或格式不正确，前端会自动回退到内置 Mock 数据
-- 本地图片建议统一放在 `public/images/`
-- `data.json` 中的图片路径建议写成 `"/images/文件名.jpg"` 这种形式
-- 你们后续只需要替换图片和 `public/data.json`，前端结构不需要改
+## 部署到 GitHub / Vercel
 
-## JSON 数据格式
+- GitHub 只提交代码、文档、前端压缩展示图片和 `frontend/public/data.json`
+- `data/raw/`、后端运行态 `users/`、`data/`、缓存和构建产物默认忽略
+- Vercel 会按 `vercel.json` 在 `frontend/` 内安装依赖并构建
 
-```json
-[
-  {
-    "id": 1,
-    "url": "/images/mountain.jpg",
-    "type": "山景",
-    "time": "白天",
-    "season": "春",
-    "features": {
-      "color_score": 0.86,
-      "texture_complexity": 0.55
-    }
-  }
-]
-```
+## 常用命令
 
-字段说明：
+| 命令 | 用途 |
+| --- | --- |
+| `npm run dev` | 启动前端开发服务 |
+| `npm run generate:data` | 从原始图片生成前端展示数据 |
+| `npm run build` | 生产构建并生成可拷贝静态包 |
+| `npm run preview` | 预览生产构建 |
+| `npm run backend:dev` | 启动 Flask 后端 |
+| `npm run backend:check` | 检查后端 Python 语法 |
 
-- `id`: 数字，建议唯一。
-- `url`: 字符串，可以是本地路径，也可以是完整的图片 URL。
-- `type`: 字符串，建议使用这 10 类之一：`山景`、`海景`、`河湖景观`、`森林绿植`、`古镇小镇`、`现代化大都市`、`乡村田园`、`雪山冰川`、`瀑布溪流`、`历史古迹`。
-- `time`: 字符串，建议使用 `白天` 或 `黑夜`。
-- `season`: 字符串，建议使用 `春`、`夏`、`秋`、`冬`。
-- `features.color_score`: 数字，建议在 `0` 到 `1` 之间。
-- `features.texture_complexity`: 数字，建议在 `0` 到 `1` 之间。
+## 更多文档
 
-## 图片格式建议
-
-- 推荐格式: `jpg`、`png`、`webp`、`svg`
-- 推荐比例: `4:3` 或 `16:9`
-- 推荐尺寸: 宽度不低于 `1200px`
-- 推荐命名: 全部使用英文或拼音文件名，避免空格
-- 本地存放路径: `public/images/`
-
-## 协作更新流程
-
-1. 数据同学准备图片资源，并统一放入 `public/images/`
-2. 数据同学按约定格式修改 `public/data.json`
-3. 前端确认本地预览正常
-4. 提交并推送到 GitHub
-5. Vercel 自动重新部署，线上链接自动更新
-
-## 补充文档
-
-- 更详细的数据和图片接入说明见 [docs/DATA_AND_IMAGE_SPEC.md](docs/DATA_AND_IMAGE_SPEC.md)
-- 可直接参考的数据模板见 [public/data.template.json](public/data.template.json)
+- [接口对接约定](docs/API_CONTRACT.md)
+- [数据与图片接入说明](docs/DATA_AND_IMAGE_SPEC.md)
+- [前端指南](frontend/README.md)
+- [后端指南](backend/README.md)
+- [PRD](docs/PRD.md)

@@ -1,0 +1,838 @@
+[
+  {
+    "id": 1,
+    "url": "/images/real/photo-001-img-20250116-173812.jpg",
+    "type": "历史古迹",
+    "time": "白天",
+    "season": "冬",
+    "features": {
+      "color_score": 0.42,
+      "texture_complexity": 0.2
+    }
+  },
+  {
+    "id": 2,
+    "url": "/images/real/photo-002-img-20250131-174016.jpg",
+    "type": "海景",
+    "time": "白天",
+    "season": "冬",
+    "features": {
+      "color_score": 0.48,
+      "texture_complexity": 0.54
+    }
+  },
+  {
+    "id": 3,
+    "url": "/images/real/photo-003-img-20250117-164901-1.jpg",
+    "type": "历史古迹",
+    "time": "白天",
+    "season": "冬",
+    "features": {
+      "color_score": 0.45,
+      "texture_complexity": 0.23
+    }
+  },
+  {
+    "id": 4,
+    "url": "/images/real/photo-004-img-20250117-170348.jpg",
+    "type": "现代化大都市",
+    "time": "白天",
+    "season": "冬",
+    "features": {
+      "color_score": 0.26,
+      "texture_complexity": 0.38
+    }
+  },
+  {
+    "id": 5,
+    "url": "/images/real/photo-005-img-20250131-173646.jpg",
+    "type": "河湖景观",
+    "time": "白天",
+    "season": "冬",
+    "features": {
+      "color_score": 0.48,
+      "texture_complexity": 0.31
+    }
+  },
+  {
+    "id": 6,
+    "url": "/images/real/photo-006-img-20250131-174209.jpg",
+    "type": "海景",
+    "time": "白天",
+    "season": "冬",
+    "features": {
+      "color_score": 0.43,
+      "texture_complexity": 0.31
+    }
+  },
+  {
+    "id": 7,
+    "url": "/images/real/photo-007-img-20250131-175312.jpg",
+    "type": "古镇小镇",
+    "time": "白天",
+    "season": "冬",
+    "features": {
+      "color_score": 0.4,
+      "texture_complexity": 0.53
+    }
+  },
+  {
+    "id": 8,
+    "url": "/images/real/photo-008-img-20250131-181157-1.jpg",
+    "type": "现代化大都市",
+    "time": "黑夜",
+    "season": "冬",
+    "features": {
+      "color_score": 0.45,
+      "texture_complexity": 0.42
+    }
+  },
+  {
+    "id": 9,
+    "url": "/images/real/photo-009-img-20250201-114451.jpg",
+    "type": "历史古迹",
+    "time": "白天",
+    "season": "冬",
+    "features": {
+      "color_score": 0.28,
+      "texture_complexity": 0.41
+    }
+  },
+  {
+    "id": 10,
+    "url": "/images/real/photo-010-img-20250201-122341.jpg",
+    "type": "历史古迹",
+    "time": "白天",
+    "season": "冬",
+    "features": {
+      "color_score": 0.29,
+      "texture_complexity": 0.35
+    }
+  },
+  {
+    "id": 11,
+    "url": "/images/real/photo-011-img-20250201-155933.jpg",
+    "type": "历史古迹",
+    "time": "白天",
+    "season": "冬",
+    "features": {
+      "color_score": 0.36,
+      "texture_complexity": 0.32
+    }
+  },
+  {
+    "id": 12,
+    "url": "/images/real/photo-012-img-20250201-164845.jpg",
+    "type": "现代化大都市",
+    "time": "白天",
+    "season": "冬",
+    "features": {
+      "color_score": 0.28,
+      "texture_complexity": 0.32
+    }
+  },
+  {
+    "id": 13,
+    "url": "/images/real/photo-013-img-20250201-190819.jpg",
+    "type": "现代化大都市",
+    "time": "黑夜",
+    "season": "冬",
+    "features": {
+      "color_score": 0.3,
+      "texture_complexity": 0.32
+    }
+  },
+  {
+    "id": 14,
+    "url": "/images/real/photo-014-img-20250202-094844.jpg",
+    "type": "历史古迹",
+    "time": "白天",
+    "season": "冬",
+    "features": {
+      "color_score": 0.29,
+      "texture_complexity": 0.45
+    }
+  },
+  {
+    "id": 15,
+    "url": "/images/real/photo-015-img-20250202-113633.jpg",
+    "type": "历史古迹",
+    "time": "白天",
+    "season": "冬",
+    "features": {
+      "color_score": 0.29,
+      "texture_complexity": 0.36
+    }
+  },
+  {
+    "id": 16,
+    "url": "/images/real/photo-016-img-20250202-115652.jpg",
+    "type": "历史古迹",
+    "time": "白天",
+    "season": "冬",
+    "features": {
+      "color_score": 0.3,
+      "texture_complexity": 0.32
+    }
+  },
+  {
+    "id": 17,
+    "url": "/images/real/photo-017-img-20250415-100304.jpg",
+    "type": "现代化大都市",
+    "time": "白天",
+    "season": "春",
+    "features": {
+      "color_score": 0.25,
+      "texture_complexity": 0.53
+    }
+  },
+  {
+    "id": 18,
+    "url": "/images/real/photo-018-img-20250427-185204.jpg",
+    "type": "现代化大都市",
+    "time": "黑夜",
+    "season": "春",
+    "features": {
+      "color_score": 0.32,
+      "texture_complexity": 0.24
+    }
+  },
+  {
+    "id": 19,
+    "url": "/images/real/photo-019-img-20250427-190838.jpg",
+    "type": "现代化大都市",
+    "time": "黑夜",
+    "season": "春",
+    "features": {
+      "color_score": 0.24,
+      "texture_complexity": 0.27
+    }
+  },
+  {
+    "id": 20,
+    "url": "/images/real/photo-020-img-20250427-201923.jpg",
+    "type": "现代化大都市",
+    "time": "黑夜",
+    "season": "春",
+    "features": {
+      "color_score": 0.4,
+      "texture_complexity": 0.49
+    }
+  },
+  {
+    "id": 21,
+    "url": "/images/real/photo-021-img-20250427-202039.jpg",
+    "type": "现代化大都市",
+    "time": "黑夜",
+    "season": "春",
+    "features": {
+      "color_score": 0.45,
+      "texture_complexity": 0.5
+    }
+  },
+  {
+    "id": 22,
+    "url": "/images/real/photo-022-img-20250428-155149.jpg",
+    "type": "历史古迹",
+    "time": "白天",
+    "season": "春",
+    "features": {
+      "color_score": 0.32,
+      "texture_complexity": 0.45
+    }
+  },
+  {
+    "id": 23,
+    "url": "/images/real/photo-023-img-20250428-160355.jpg",
+    "type": "古镇小镇",
+    "time": "白天",
+    "season": "春",
+    "features": {
+      "color_score": 0.36,
+      "texture_complexity": 0.56
+    }
+  },
+  {
+    "id": 24,
+    "url": "/images/real/photo-024-img-20250428-164124.jpg",
+    "type": "海景",
+    "time": "白天",
+    "season": "春",
+    "features": {
+      "color_score": 0.46,
+      "texture_complexity": 0.47
+    }
+  },
+  {
+    "id": 25,
+    "url": "/images/real/photo-025-img-20250428-184223.jpg",
+    "type": "现代化大都市",
+    "time": "黑夜",
+    "season": "春",
+    "features": {
+      "color_score": 0.26,
+      "texture_complexity": 0.32
+    }
+  },
+  {
+    "id": 26,
+    "url": "/images/real/photo-026-img-20250428-195117.jpg",
+    "type": "现代化大都市",
+    "time": "黑夜",
+    "season": "春",
+    "features": {
+      "color_score": 0.25,
+      "texture_complexity": 0.21
+    }
+  },
+  {
+    "id": 27,
+    "url": "/images/real/photo-027-img-20250428-203337.jpg",
+    "type": "现代化大都市",
+    "time": "黑夜",
+    "season": "春",
+    "features": {
+      "color_score": 0.32,
+      "texture_complexity": 0.37
+    }
+  },
+  {
+    "id": 28,
+    "url": "/images/real/photo-028-img-20250429-063529.jpg",
+    "type": "现代化大都市",
+    "time": "白天",
+    "season": "春",
+    "features": {
+      "color_score": 0.3,
+      "texture_complexity": 0.48
+    }
+  },
+  {
+    "id": 29,
+    "url": "/images/real/photo-029-img-20250429-103041.jpg",
+    "type": "历史古迹",
+    "time": "白天",
+    "season": "春",
+    "features": {
+      "color_score": 0.29,
+      "texture_complexity": 0.33
+    }
+  },
+  {
+    "id": 30,
+    "url": "/images/real/photo-030-img-20250429-121747.jpg",
+    "type": "森林绿植",
+    "time": "白天",
+    "season": "春",
+    "features": {
+      "color_score": 0.35,
+      "texture_complexity": 0.49
+    }
+  },
+  {
+    "id": 31,
+    "url": "/images/real/photo-031-img-20250429-150023.jpg",
+    "type": "森林绿植",
+    "time": "白天",
+    "season": "春",
+    "features": {
+      "color_score": 0.43,
+      "texture_complexity": 0.51
+    }
+  },
+  {
+    "id": 32,
+    "url": "/images/real/photo-032-img-20250429-150331.jpg",
+    "type": "历史古迹",
+    "time": "白天",
+    "season": "春",
+    "features": {
+      "color_score": 0.33,
+      "texture_complexity": 0.5
+    }
+  },
+  {
+    "id": 33,
+    "url": "/images/real/photo-033-img-20250429-152657.jpg",
+    "type": "海景",
+    "time": "白天",
+    "season": "春",
+    "features": {
+      "color_score": 0.39,
+      "texture_complexity": 0.46
+    }
+  },
+  {
+    "id": 34,
+    "url": "/images/real/photo-034-img-20250429-163118.jpg",
+    "type": "乡村田园",
+    "time": "白天",
+    "season": "春",
+    "features": {
+      "color_score": 0.32,
+      "texture_complexity": 0.37
+    }
+  },
+  {
+    "id": 35,
+    "url": "/images/real/photo-035-img-20250429-163358.jpg",
+    "type": "森林绿植",
+    "time": "白天",
+    "season": "春",
+    "features": {
+      "color_score": 0.44,
+      "texture_complexity": 0.6
+    }
+  },
+  {
+    "id": 36,
+    "url": "/images/real/photo-036-img-20250429-163646.jpg",
+    "type": "历史古迹",
+    "time": "白天",
+    "season": "春",
+    "features": {
+      "color_score": 0.38,
+      "texture_complexity": 0.36
+    }
+  },
+  {
+    "id": 37,
+    "url": "/images/real/photo-037-img-20250429-163938.jpg",
+    "type": "现代化大都市",
+    "time": "白天",
+    "season": "春",
+    "features": {
+      "color_score": 0.28,
+      "texture_complexity": 0.45
+    }
+  },
+  {
+    "id": 38,
+    "url": "/images/real/photo-038-img-20250430-102832.jpg",
+    "type": "历史古迹",
+    "time": "白天",
+    "season": "春",
+    "features": {
+      "color_score": 0.38,
+      "texture_complexity": 0.44
+    }
+  },
+  {
+    "id": 39,
+    "url": "/images/real/photo-039-img-20250430-102833.jpg",
+    "type": "历史古迹",
+    "time": "白天",
+    "season": "春",
+    "features": {
+      "color_score": 0.36,
+      "texture_complexity": 0.43
+    }
+  },
+  {
+    "id": 40,
+    "url": "/images/real/photo-040-img-20250430-105445.jpg",
+    "type": "现代化大都市",
+    "time": "白天",
+    "season": "春",
+    "features": {
+      "color_score": 0.26,
+      "texture_complexity": 0.32
+    }
+  },
+  {
+    "id": 41,
+    "url": "/images/real/photo-041-img-20250430-120300.jpg",
+    "type": "海景",
+    "time": "白天",
+    "season": "春",
+    "features": {
+      "color_score": 0.4,
+      "texture_complexity": 0.33
+    }
+  },
+  {
+    "id": 42,
+    "url": "/images/real/photo-042-img-20250430-183554.jpg",
+    "type": "现代化大都市",
+    "time": "黑夜",
+    "season": "春",
+    "features": {
+      "color_score": 0.37,
+      "texture_complexity": 0.3
+    }
+  },
+  {
+    "id": 43,
+    "url": "/images/real/photo-043-img-20250430-183625.jpg",
+    "type": "现代化大都市",
+    "time": "黑夜",
+    "season": "春",
+    "features": {
+      "color_score": 0.43,
+      "texture_complexity": 0.39
+    }
+  },
+  {
+    "id": 44,
+    "url": "/images/real/photo-044-img-20250430-184448.jpg",
+    "type": "现代化大都市",
+    "time": "黑夜",
+    "season": "春",
+    "features": {
+      "color_score": 0.34,
+      "texture_complexity": 0.25
+    }
+  },
+  {
+    "id": 45,
+    "url": "/images/real/photo-045-img-20250515-132431.jpg",
+    "type": "历史古迹",
+    "time": "白天",
+    "season": "春",
+    "features": {
+      "color_score": 0.29,
+      "texture_complexity": 0.35
+    }
+  },
+  {
+    "id": 46,
+    "url": "/images/real/photo-046-img-20251001-203549.jpg",
+    "type": "现代化大都市",
+    "time": "黑夜",
+    "season": "秋",
+    "features": {
+      "color_score": 0.44,
+      "texture_complexity": 0.22
+    }
+  },
+  {
+    "id": 47,
+    "url": "/images/real/photo-047-img-20260429-101559-1.jpg",
+    "type": "历史古迹",
+    "time": "白天",
+    "season": "春",
+    "features": {
+      "color_score": 0.33,
+      "texture_complexity": 0.49
+    }
+  },
+  {
+    "id": 48,
+    "url": "/images/real/photo-048-img-20260429-132617-1.jpg",
+    "type": "森林绿植",
+    "time": "白天",
+    "season": "春",
+    "features": {
+      "color_score": 0.41,
+      "texture_complexity": 0.62
+    }
+  },
+  {
+    "id": 49,
+    "url": "/images/real/photo-049-img-20260429-133508-1.jpg",
+    "type": "现代化大都市",
+    "time": "白天",
+    "season": "春",
+    "features": {
+      "color_score": 0.26,
+      "texture_complexity": 0.22
+    }
+  },
+  {
+    "id": 50,
+    "url": "/images/real/photo-050-img-20260429-142145-1.jpg",
+    "type": "历史古迹",
+    "time": "白天",
+    "season": "春",
+    "features": {
+      "color_score": 0.32,
+      "texture_complexity": 0.35
+    }
+  },
+  {
+    "id": 51,
+    "url": "/images/real/photo-051-img-20260429-150638-1.jpg",
+    "type": "乡村田园",
+    "time": "白天",
+    "season": "春",
+    "features": {
+      "color_score": 0.29,
+      "texture_complexity": 0.39
+    }
+  },
+  {
+    "id": 52,
+    "url": "/images/real/photo-052-img-20260429-153944-1.jpg",
+    "type": "海景",
+    "time": "白天",
+    "season": "春",
+    "features": {
+      "color_score": 0.41,
+      "texture_complexity": 0.66
+    }
+  },
+  {
+    "id": 53,
+    "url": "/images/real/photo-053-img-20260429-161434-1.jpg",
+    "type": "现代化大都市",
+    "time": "白天",
+    "season": "春",
+    "features": {
+      "color_score": 0.28,
+      "texture_complexity": 0.54
+    }
+  },
+  {
+    "id": 54,
+    "url": "/images/real/photo-054-img-20260430-131941-1.jpg",
+    "type": "雪山冰川",
+    "time": "白天",
+    "season": "春",
+    "features": {
+      "color_score": 0.27,
+      "texture_complexity": 0.31
+    }
+  },
+  {
+    "id": 55,
+    "url": "/images/real/photo-055-img-20260430-150600-1.jpg",
+    "type": "现代化大都市",
+    "time": "白天",
+    "season": "春",
+    "features": {
+      "color_score": 0.19,
+      "texture_complexity": 0.26
+    }
+  },
+  {
+    "id": 56,
+    "url": "/images/real/photo-056-img-20260430-151541-1.jpg",
+    "type": "现代化大都市",
+    "time": "白天",
+    "season": "春",
+    "features": {
+      "color_score": 0.27,
+      "texture_complexity": 0.35
+    }
+  },
+  {
+    "id": 57,
+    "url": "/images/real/photo-057-img-20260430-154023-1.jpg",
+    "type": "现代化大都市",
+    "time": "白天",
+    "season": "春",
+    "features": {
+      "color_score": 0.23,
+      "texture_complexity": 0.3
+    }
+  },
+  {
+    "id": 58,
+    "url": "/images/real/photo-058-img-20260501-112411-1.jpg",
+    "type": "历史古迹",
+    "time": "白天",
+    "season": "春",
+    "features": {
+      "color_score": 0.28,
+      "texture_complexity": 0.34
+    }
+  },
+  {
+    "id": 59,
+    "url": "/images/real/photo-059-img-20260501-125530-1.jpg",
+    "type": "古镇小镇",
+    "time": "白天",
+    "season": "春",
+    "features": {
+      "color_score": 0.29,
+      "texture_complexity": 0.62
+    }
+  },
+  {
+    "id": 60,
+    "url": "/images/real/photo-060-img-20260501-134306-1.jpg",
+    "type": "森林绿植",
+    "time": "白天",
+    "season": "春",
+    "features": {
+      "color_score": 0.43,
+      "texture_complexity": 0.54
+    }
+  },
+  {
+    "id": 61,
+    "url": "/images/real/photo-061-img-20260501-140723-1.jpg",
+    "type": "现代化大都市",
+    "time": "白天",
+    "season": "春",
+    "features": {
+      "color_score": 0.3,
+      "texture_complexity": 0.56
+    }
+  },
+  {
+    "id": 62,
+    "url": "/images/real/photo-062-img-20260502-114906-1.jpg",
+    "type": "历史古迹",
+    "time": "白天",
+    "season": "春",
+    "features": {
+      "color_score": 0.23,
+      "texture_complexity": 0.4
+    }
+  },
+  {
+    "id": 63,
+    "url": "/images/real/photo-063-img-20260502-121047-1.jpg",
+    "type": "现代化大都市",
+    "time": "白天",
+    "season": "春",
+    "features": {
+      "color_score": 0.3,
+      "texture_complexity": 0.29
+    }
+  },
+  {
+    "id": 64,
+    "url": "/images/real/photo-064-img-20260502-123055-1.jpg",
+    "type": "现代化大都市",
+    "time": "白天",
+    "season": "春",
+    "features": {
+      "color_score": 0.28,
+      "texture_complexity": 0.4
+    }
+  },
+  {
+    "id": 65,
+    "url": "/images/real/photo-065-img-20260502-141237-1.jpg",
+    "type": "现代化大都市",
+    "time": "白天",
+    "season": "春",
+    "features": {
+      "color_score": 0.31,
+      "texture_complexity": 0.69
+    }
+  },
+  {
+    "id": 66,
+    "url": "/images/real/photo-066-img-20260502-154106-1-1.jpg",
+    "type": "现代化大都市",
+    "time": "白天",
+    "season": "春",
+    "features": {
+      "color_score": 0.26,
+      "texture_complexity": 0.45
+    }
+  },
+  {
+    "id": 67,
+    "url": "/images/real/photo-067-img-20260502-175402-1.jpg",
+    "type": "现代化大都市",
+    "time": "白天",
+    "season": "春",
+    "features": {
+      "color_score": 0.24,
+      "texture_complexity": 0.49
+    }
+  },
+  {
+    "id": 68,
+    "url": "/images/real/photo-068-img-20260504-090436-1.jpg",
+    "type": "海景",
+    "time": "白天",
+    "season": "春",
+    "features": {
+      "color_score": 0.42,
+      "texture_complexity": 0.12
+    }
+  },
+  {
+    "id": 69,
+    "url": "/images/real/photo-069-img-20260504-100220-1.jpg",
+    "type": "海景",
+    "time": "白天",
+    "season": "春",
+    "features": {
+      "color_score": 0.49,
+      "texture_complexity": 0.17
+    }
+  },
+  {
+    "id": 70,
+    "url": "/images/real/photo-070-img-20260504-122543-1.jpg",
+    "type": "海景",
+    "time": "白天",
+    "season": "春",
+    "features": {
+      "color_score": 0.4,
+      "texture_complexity": 0.35
+    }
+  },
+  {
+    "id": 71,
+    "url": "/images/real/photo-071-img-20260504-124213-1.jpg",
+    "type": "海景",
+    "time": "白天",
+    "season": "春",
+    "features": {
+      "color_score": 0.43,
+      "texture_complexity": 0.31
+    }
+  },
+  {
+    "id": 72,
+    "url": "/images/real/photo-072-img-20260504-134230-1.jpg",
+    "type": "海景",
+    "time": "白天",
+    "season": "春",
+    "features": {
+      "color_score": 0.37,
+      "texture_complexity": 0.32
+    }
+  },
+  {
+    "id": 73,
+    "url": "/images/real/photo-073-img-20260504-140939-1.jpg",
+    "type": "海景",
+    "time": "白天",
+    "season": "春",
+    "features": {
+      "color_score": 0.42,
+      "texture_complexity": 0.27
+    }
+  },
+  {
+    "id": 74,
+    "url": "/images/real/photo-074-img-20260504-141956-1.jpg",
+    "type": "森林绿植",
+    "time": "白天",
+    "season": "春",
+    "features": {
+      "color_score": 0.31,
+      "texture_complexity": 0.57
+    }
+  },
+  {
+    "id": 75,
+    "url": "/images/real/photo-075-img-20260504-142147-1.jpg",
+    "type": "历史古迹",
+    "time": "白天",
+    "season": "春",
+    "features": {
+      "color_score": 0.55,
+      "texture_complexity": 0.47
+    }
+  },
+  {
+    "id": 76,
+    "url": "/images/real/photo-076-img-20260504-142949-1.jpg",
+    "type": "海景",
+    "time": "白天",
+    "season": "春",
+    "features": {
+      "color_score": 0.4,
+      "texture_complexity": 0.24
+    }
+  }
+]

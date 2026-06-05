@@ -1,0 +1,24 @@
+[
+  {
+    "id": 1,
+    "url": "/images/real/photo-001-img-20250116-173812.jpg",
+    "type": "山景",
+    "time": "白天",
+    "season": "春",
+    "features": {
+      "color_score": 0.86,
+      "texture_complexity": 0.55
+    }
+  },
+  {
+    "id": 2,
+    "url": "/images/real/photo-002-img-20250131-174016.jpg",
+    "type": "海景",
+    "time": "黑夜",
+    "season": "夏",
+    "features": {
+      "color_score": 0.78,
+      "texture_complexity": 0.42
+    }
+  }
+]
