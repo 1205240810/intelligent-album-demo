@@ -137,6 +137,7 @@ npm run build
 
 - [接口对接约定](docs/API_CONTRACT.md)
 - [数据与图片接入说明](docs/DATA_AND_IMAGE_SPEC.md)
+- [国内网络展示部署建议](docs/CHINA_DEPLOY.md)
 - [前端指南](frontend/README.md)
 - [后端指南](backend/README.md)
 - [PRD](docs/PRD.md)
