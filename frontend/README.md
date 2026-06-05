@@ -26,7 +26,6 @@ VITE_PHOTO_DATA_API_URL=http://127.0.0.1:8080/api/photos?username=张三&album_n
 - `src/App.jsx`：页面主结构、筛选状态、数据加载
 - `src/components/InsightBoard.jsx`：结论、证据和图表区
 - `src/components/ImageGrid.jsx`：照片证据库
-- `src/components/ProjectShowcase.jsx`：项目展示区
 - `src/lib/data.js`：API / JSON / 临时样本加载与字段归一化
 - `src/lib/insights.js`：统计结论计算
 - `src/constants/filters.js`：枚举、颜色、示例图片

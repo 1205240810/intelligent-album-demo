@@ -16,7 +16,6 @@ import FilterBar from './components/FilterBar';
 import ImageGrid from './components/ImageGrid';
 import InsightBoard from './components/InsightBoard';
 import PhotoModal from './components/PhotoModal';
-import ProjectShowcase from './components/ProjectShowcase';
 import ScenicImage from './components/ScenicImage';
 import { SEASON_OPTIONS, TIME_OPTIONS, TYPE_OPTIONS } from './constants/filters';
 import { loadPhotoDataset } from './lib/data';
@@ -229,9 +228,6 @@ export default function App() {
             <a className="nav-link" href="#gallery">
               照片
             </a>
-            <a className="nav-link" href="#project">
-              项目
-            </a>
           </nav>
 
           <div className="hidden items-center gap-2 rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-2 text-xs text-zinc-600 sm:flex">
@@ -398,8 +394,6 @@ export default function App() {
             />
           )}
         </section>
-
-        {!loading ? <ProjectShowcase totalCount={photos.length} dataSource={dataSource} /> : null}
       </main>
 
       <PhotoModal photo={selectedPhoto} onClose={() => setSelectedPhoto(null)} />
