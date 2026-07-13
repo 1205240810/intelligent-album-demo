@@ -26,6 +26,7 @@ const stageDir = join(releaseDir, packageName);
 const defaultPpt = join(root, 'submission', '智能相册分析系统-答辩.pptx');
 const pptPath = process.argv[2] ? join(root, process.argv[2]) : defaultPpt;
 const zipPath = join(releaseDir, `${packageName}.zip`);
+const compatibilityZipPath = join(releaseDir, 'intelligent-album-course-submission.zip');
 
 function requireFile(path, message) {
   if (!existsSync(path) || !statSync(path).isFile()) {
@@ -94,6 +95,7 @@ if (embeddedImageCount < photoCount) {
 
 rmSync(stageDir, { recursive: true, force: true });
 rmSync(zipPath, { force: true });
+rmSync(compatibilityZipPath, { force: true });
 mkdirSync(join(stageDir, '01_直接演示'), { recursive: true });
 mkdirSync(join(stageDir, '03_项目文档'), { recursive: true });
 mkdirSync(join(stageDir, '04_答辩材料'), { recursive: true });
@@ -158,10 +160,12 @@ const manifest = filesUnder(stageDir)
 writeFileSync(manifestPath, `SHA-256  大小(byte)  文件\n${manifest.join('\n')}\n`, 'utf8');
 
 mkdirSync(releaseDir, { recursive: true });
-execFileSync('/usr/bin/zip', ['-r', '-X', basename(zipPath), packageName], {
-  cwd: releaseDir,
-  stdio: 'inherit',
-});
+execFileSync(
+  'python3',
+  [join(root, 'scripts', 'create_submission_zip.py'), stageDir, zipPath],
+  { cwd: releaseDir, stdio: 'inherit' },
+);
+copyFileSync(zipPath, compatibilityZipPath);
 
 const zipSize = statSync(zipPath).size;
 if (zipSize > 100 * 1024 * 1024) {
@@ -170,4 +174,5 @@ if (zipSize > 100 * 1024 * 1024) {
 }
 
 console.log(`最终压缩包: ${zipPath}`);
+console.log(`兼容文件名副本: ${compatibilityZipPath}`);
 console.log(`大小: ${(zipSize / 1024 / 1024).toFixed(1)}MB`);

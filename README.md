@@ -88,7 +88,7 @@ npm run build:single    # 生成 output/cos-single/index.html
 npm run package:submission
 ```
 
-脚本会重新验证项目、生成约 12MB 的自包含 HTML、复制源码和文档、校验 PPT、生成 SHA-256 清单，并输出 `release/智能相册分析系统-课程作业.zip`。PPT 缺失或损坏时命令会失败，不会生成残缺压缩包。
+脚本会重新验证项目、生成约 12MB 的自包含 HTML、复制源码和文档、校验 PPT、生成 SHA-256 清单，并输出带 UTF-8 文件名标记的 `release/智能相册分析系统-课程作业.zip`，同时生成英文文件名副本 `release/intelligent-album-course-submission.zip`。PPT 缺失或损坏时命令会失败，不会生成残缺压缩包。
 
 ## 常用命令
 
