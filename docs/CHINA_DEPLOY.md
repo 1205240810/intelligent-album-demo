@@ -1,55 +1,71 @@
-# 国内网络展示部署建议
+# 国内展示部署说明
 
-当前项目是纯前端静态站点，构建产物在 `frontend/dist/`，适合部署到国内可访问的静态托管服务。
+## 当前入口
 
-## 推荐方案：腾讯云 EdgeOne Pages
+- 腾讯云 CloudBase：<https://graduate-sim-d6gl5fih109ef4a1f.service.tcloudbase.com/album-demo>
+- Vercel 备用：<https://intelligent-album-demo.vercel.app>
 
-适合：希望有公开 HTTPS 链接、国内访问更稳定、以后 GitHub 推送后自动部署。
+CloudBase 测试域名首次访问可能显示安全提示，确认访问后进入页面。该地址展示静态分析结果，不包含上传后端。
 
-### Git 自动部署
+## 为什么使用“静态资源 + 云函数页面”
 
-1. 打开 EdgeOne Pages 控制台
-2. 选择从 Git 仓库导入项目
-3. 连接 GitHub 仓库：
+当前腾讯云静态测试域名会把 HTML/CSS 作为附件下载，不适合直接打开首页。因此部署采用：
 
-   ```text
-   https://github.com/1205240810/intelligent-album-demo
-   ```
+1. CloudBase 静态托管保存 JS、图表分包和 76 张图片。
+2. 云函数 `albumDemoPage` 返回正确 `text/html` 响应。
+3. 构建脚本把 CSS 内嵌到函数页面，把 JS 和图片改写到静态资源域名。
+4. HTTP 服务路径 `/album-demo` 对外提供可直接打开的页面。
 
-4. 构建配置填写：
+## 更新步骤
 
-   ```text
-   Build command: npm install --prefix frontend && npm --prefix frontend run build
-   Output directory: frontend/dist
-   ```
-
-5. 部署完成后会得到一个 `*.edgeone.app` 访问链接。
-
-### 直接上传
-
-如果不想连接 GitHub，也可以先在本地构建：
+先登录腾讯云 CLI，并准备文件：
 
 ```bash
-npm run build
+npm run deploy:cloudbase:prepare
 ```
 
-然后把 `frontend/dist/` 整个文件夹拖到 EdgeOne Pages Drop / Direct Upload 上传区。
+默认环境参数：
 
-## 备用方案：阿里云 OSS 静态网站
+```text
+环境 ID: graduate-sim-d6gl5fih109ef4a1f
+函数名: albumDemoPage
+服务路径: /album-demo
+静态域名: https://graduate-sim-d6gl5fih109ef4a1f-1424455477.tcloudbaseapp.com
+```
 
-适合：已经有阿里云账号、Bucket、域名或希望后续绑定自定义域名。
+部署静态资源：
 
-基本步骤：
+```bash
+npx -y -p @cloudbase/cli@3.5.6 cloudbase hosting deploy frontend/dist \
+  -e graduate-sim-d6gl5fih109ef4a1f
+```
 
-1. 执行 `npm run build`
-2. 创建 OSS Bucket
-3. 开启静态网站托管
-4. 上传 `frontend/dist/` 内所有文件到 Bucket 根目录
-5. 默认首页设置为 `index.html`
-6. 如需自定义域名，按阿里云要求完成域名绑定；中国内地区域通常需要备案
+部署函数与服务路径：
 
-## 不推荐作为国内主链路
+```bash
+npx -y -p @cloudbase/cli@3.5.6 cloudbase fn deploy albumDemoPage \
+  --dir output/cloudbase-function \
+  --path /album-demo \
+  --force \
+  -e graduate-sim-d6gl5fih109ef4a1f
+```
 
-- Vercel：部署方便，但国内网络访问不稳定
-- GitHub Pages：仓库联动方便，但国内网络访问不稳定
-- Gitee Pages：当前服务能力不适合作为新项目主部署方案
+如静态域名或环境变化，可覆盖：
+
+```bash
+CLOUDBASE_STATIC_ORIGIN=https://新的静态域名 npm run deploy:cloudbase:prepare
+```
+
+## 验收
+
+```bash
+curl -I https://graduate-sim-d6gl5fih109ef4a1f.service.tcloudbase.com/album-demo
+```
+
+响应应为 `200` 且 `Content-Type` 包含 `text/html`。随后在浏览器检查首屏、图表异步分包和真实图片是否都能加载。
+
+## 其他国内方案
+
+- 已备案域名：可使用腾讯云 COS/EdgeOne 或阿里云 OSS 静态网站托管。
+- 无备案域名：CloudBase 测试域名适合课程短期展示，但可能出现提示页和平台限额。
+- 不建议把 Vercel 或 GitHub Pages 作为国内网络唯一入口。

@@ -3,7 +3,7 @@ import {
   SEASON_ORDER,
   TIME_ORDER,
   TYPE_ORDER,
-} from '../constants/filters';
+} from '../constants/filters.js';
 
 const baseFeatureByType = {
   山景: { color: 0.84, texture: 0.58 },

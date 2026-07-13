@@ -1,15 +1,17 @@
 import { BarChart3, Compass, Layers3, Palette, SunMoon } from 'lucide-react';
+import { lazy, Suspense } from 'react';
 import { TYPE_COLORS } from '../constants/filters';
 import { percent } from '../lib/insights';
-import Dashboard from './Dashboard';
 import ScenicImage from './ScenicImage';
+
+const Dashboard = lazy(() => import('./Dashboard'));
 
 function HighlightTile({ icon: Icon, label, value, detail }) {
   return (
     <div className="metric-card p-4">
       <div className="flex items-center justify-between gap-3">
         <div className="text-sm text-zinc-600">{label}</div>
-        <Icon className="h-4 w-4 text-zinc-950" />
+        <Icon className="h-4 w-4 text-teal-700" />
       </div>
       <div className="mt-3 text-xl font-semibold text-zinc-950">{value}</div>
       <div className="mt-1 text-sm text-zinc-500">{detail}</div>
@@ -108,7 +110,7 @@ export default function InsightBoard({ analysis, photos }) {
                 <h4 className="font-semibold text-zinc-950">Top 景点类型</h4>
                 <p className="mt-1 text-sm text-zinc-500">按当前筛选池照片数量排序</p>
               </div>
-              <Compass className="h-5 w-5 text-zinc-950" />
+              <Compass className="h-5 w-5 text-teal-700" />
             </div>
             {(analysis.topTypes.length ? analysis.topTypes : [{ name: '暂无数据', count: 0 }]).map(
               (item) => (
@@ -136,8 +138,8 @@ export default function InsightBoard({ analysis, photos }) {
           </div>
         </div>
 
-        <div className="mt-4 rounded-lg border border-zinc-200 bg-zinc-50 p-4 text-sm leading-7 text-zinc-800">
-          <div className="mb-1 flex items-center gap-2 font-medium">
+        <div className="mt-4 rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm leading-7 text-amber-950">
+          <div className="mb-1 flex items-center gap-2 font-medium text-amber-800">
             <SunMoon className="h-4 w-4" />
             观测提示
           </div>
@@ -145,7 +147,15 @@ export default function InsightBoard({ analysis, photos }) {
         </div>
       </div>
 
-      <Dashboard photos={photos} analysis={analysis} />
+      <Suspense
+        fallback={
+          <div className="border-t border-zinc-200 p-6">
+            <div className="h-[420px] animate-pulse rounded-lg bg-teal-50" />
+          </div>
+        }
+      >
+        <Dashboard photos={photos} analysis={analysis} />
+      </Suspense>
     </section>
   );
 }

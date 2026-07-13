@@ -87,7 +87,7 @@ export default function PhotoModal({ photo, onClose }) {
         aria-modal="true"
         aria-labelledby="photo-dialog-title"
         aria-describedby="photo-dialog-description"
-        className="surface-panel relative z-10 max-h-[92vh] w-full max-w-5xl overflow-hidden"
+        className="surface-panel relative z-10 max-h-[92vh] w-full max-w-5xl overflow-y-auto overscroll-contain"
       >
         <button
           type="button"

@@ -1,5 +1,5 @@
 Flask>=3.0,<4
 requests>=2.31,<3
-urllib3>=1.26,<2
+urllib3>=1.26.20,<2
 Pillow>=10,<12
 exifread>=3.0,<4

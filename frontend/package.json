@@ -7,10 +7,12 @@
     "dev": "vite",
     "generate:data": "python3 scripts/generate_real_dataset.py",
     "build": "vite build && node scripts/make-file-safe-build.mjs",
-    "preview": "vite preview"
+    "build:single": "vite build --config vite.single.config.js && node scripts/make-single-file-build.mjs",
+    "preview": "vite preview",
+    "test": "node --test tests/*.test.js"
   },
   "dependencies": {
-    "echarts": "^5.6.0",
+    "echarts": "^6.1.0",
     "lucide-react": "^0.511.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
@@ -20,6 +22,6 @@
     "autoprefixer": "^10.4.20",
     "postcss": "^8.4.49",
     "tailwindcss": "^3.4.17",
-    "vite": "^5.4.11"
+    "vite": "^6.4.3"
   }
 }

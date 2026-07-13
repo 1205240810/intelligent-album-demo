@@ -1,53 +1,72 @@
-# 后端指南
+# 后端使用指南
 
-后端位于 `backend/photo_album/`，技术栈为 Flask、Pillow、requests、exifread。
+后端位于 `backend/photo_album/`，使用 Flask、Pillow、requests 和 exifread，保存方式为本地 JSON。它适合课程演示和可信的单机环境，不包含生产级账号鉴权与并发数据库。
 
-## 安装
+## 安装与启动
+
+在项目根目录执行：
 
 ```bash
 python3 -m venv backend/photo_album/.venv
 backend/photo_album/.venv/bin/pip install -r backend/photo_album/requirements.txt
-```
-
-## 启动
-
-```bash
 npm run backend:dev
 ```
 
-默认地址：`http://127.0.0.1:8080/`
+默认地址：<http://127.0.0.1:8080/>。
 
-## 可选环境变量
+可选环境变量：
 
 ```bash
 export BAIDU_AK=你的百度地图AK
 export CORS_ALLOW_ORIGIN=http://127.0.0.1:5173
+export MAX_UPLOAD_MB=20
 ```
 
-未配置 `BAIDU_AK` 时后端仍可启动，只是 GPS 地址反查会跳过。
+未配置 `BAIDU_AK` 时服务仍能启动，GPS 地址反查会跳过。单文件上传默认最大 20MB。
 
-## 关键接口
+## 后端完成的处理
 
-- `GET /api/photos?username=张三&album_name=我的照片`
-- `GET /media/<safe-path>`
-- `POST /register`
-- `POST /create_album`
-- `POST /upload`
-- `POST /delete_photo`
-- `POST /delete_album`
-- `POST /delete_user`
+1. 验证用户名、相册名和文件路径，阻止目录穿越。
+2. 同时校验图片扩展名和真实图片内容。
+3. 同名上传自动生成 `name-2.jpg` 等唯一文件名。
+4. 提取 EXIF 时间、设备和 GPS；有 AK 时反查地址。
+5. 根据时间判断季节与昼夜，根据地址关键词映射景点类型。
+6. 使用像素饱和度、亮度、暗部比例和边缘强度计算特征。
+7. 生成 JPEG 缩略图、保存元数据，并原子写入三级统计。
+8. 通过 `/api/photos` 输出前端统一数据结构，通过 `/media` 提供图片。
 
-## 关键代码
+这些方法属于可解释规则，不应描述为训练后的图像识别模型。
 
-- `app.py`：创建 Flask app、注册 Blueprint、设置 CORS
-- `routes.py`：业务接口、媒体路由、前端合约字段输出
-- `image_analyzer.py`：EXIF、GPS、时段、季节、地址和景点类型分析
-- `stats_manager.py`：相册、用户、平台三级统计
-- `config.py`：环境变量配置
+## 主要接口
+
+| 方法 | 路径 | 用途 |
+| --- | --- | --- |
+| `GET` | `/api/photos` | 查询相册照片统一数据 |
+| `GET` | `/media/<safe-path>` | 访问相册图片 |
+| `POST` | `/register` | 创建用户 |
+| `POST` | `/create_album` | 创建相册 |
+| `POST` | `/upload` | 上传并分析图片 |
+| `POST` | `/delete_photo` | 删除照片并更新统计 |
+| `POST` | `/delete_album` | 删除相册并更新统计 |
+| `POST` | `/delete_user` | 删除用户并更新统计 |
+| `GET` | `/stats/album` | 查询相册统计 |
+| `GET` | `/stats/user` | 查询用户统计 |
+| `GET` | `/stats/platform` | 查询平台统计 |
+
+完整请求与响应见 `docs/API_CONTRACT.md`。
 
 ## 运行态目录
 
-- `backend/photo_album/users/`：本地用户、相册、照片和元数据
-- `backend/photo_album/data/`：本地统计 JSON
+- `backend/photo_album/users/`：用户、相册、图片、缩略图和元数据。
+- `backend/photo_album/data/`：相册、用户和平台统计 JSON。
 
-这两个目录默认不提交 Git，仅保留 `.gitkeep`，避免把本地照片库和运行缓存推到仓库。
+两者只保留 `.gitkeep`，本地运行数据不会提交 GitHub，也不会进入最终压缩包。
+
+## 验证
+
+```bash
+npm run backend:check
+npm run test:backend
+```
+
+测试覆盖非法 JSON、路径穿越、伪图片、同名图片、媒体访问、空相册和完整删除统计链路。

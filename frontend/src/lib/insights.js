@@ -3,7 +3,7 @@ import {
   SEASON_ORDER,
   TIME_ORDER,
   TYPE_ORDER,
-} from '../constants/filters';
+} from '../constants/filters.js';
 
 const percent = (value) => `${Math.round(value * 100)}%`;
 

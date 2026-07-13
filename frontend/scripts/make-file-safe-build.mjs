@@ -13,16 +13,14 @@ if (!existsSync(indexPath)) {
 
 let html = readFileSync(indexPath, 'utf8');
 
-html = html.replace(
-  /<script\s+type="module"\s+crossorigin\s+src="([^"]+)"><\/script>/,
-  '<script defer src="$1"></script>',
-);
-
 if (existsSync(dataPath) && !html.includes('id="photo-data"')) {
   const dataJson = readFileSync(dataPath, 'utf8').replace(/</g, '\\u003c');
   const dataTag = `    <script id="photo-data" type="application/json">${dataJson}</script>\n`;
 
-  html = html.replace(/(\s*<script defer src="\.\/assets\/[^"]+"><\/script>)/, `\n${dataTag}$1`);
+  html = html.replace(
+    /(\s*<script\s+type="module"\s+crossorigin\s+src="\.\/assets\/[^"]+"><\/script>)/,
+    `\n${dataTag}$1`,
+  );
 }
 
 writeFileSync(indexPath, html);

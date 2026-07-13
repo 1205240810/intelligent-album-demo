@@ -1,11 +1,44 @@
 import os
 import json
+import tempfile
 from datetime import datetime
 root_path = os.path.dirname(os.path.abspath(__file__))
 
+
+def _read_json(path, default):
+    if not os.path.exists(path):
+        return default
+    try:
+        with open(path, "r", encoding="utf-8") as handle:
+            payload = json.load(handle)
+    except (OSError, json.JSONDecodeError):
+        return default
+    return payload if isinstance(payload, dict) else default
+
+
+def _atomic_write_json(path, payload):
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    descriptor, temp_path = tempfile.mkstemp(prefix=".stats-", suffix=".json", dir=os.path.dirname(path))
+    try:
+        with os.fdopen(descriptor, "w", encoding="utf-8") as handle:
+            json.dump(payload, handle, ensure_ascii=False, indent=2)
+            handle.write("\n")
+            handle.flush()
+            os.fsync(handle.fileno())
+        os.replace(temp_path, path)
+    finally:
+        if os.path.exists(temp_path):
+            os.remove(temp_path)
+
+
+def _safe_total(stats):
+    return max(1, int(stats.get("总照片数", 0) or 0))
+
+
 class StatsManager:
-    def __init__(self, data_dir="./data"):
+    def __init__(self, data_dir="./data", users_base=None):
         self.data_dir = data_dir
+        self.users_base = users_base or os.path.join(root_path, "users")
         self.users_dir = os.path.join(data_dir, "users")
         self.albums_dir = os.path.join(data_dir, "albums")
         self.platform_file = os.path.join(data_dir, "platform_stats.json")
@@ -15,10 +48,7 @@ class StatsManager:
 
     # ========== 平台级统计 ==========
     def _load_platform_stats(self):
-        if os.path.exists(self.platform_file):
-            with open(self.platform_file, 'r', encoding='utf-8') as f:
-                return json.load(f)
-        return {
+        default = {
             "总照片数": 0,
             "总用户数": 0,
             "省份统计": {},
@@ -28,11 +58,23 @@ class StatsManager:
             "时段统计": {},
             "最后更新": None
         }
+        return _read_json(self.platform_file, default)
 
     def _save_platform_stats(self, stats):
         stats["最后更新"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        with open(self.platform_file, 'w', encoding='utf-8') as f:
-            json.dump(stats, f, ensure_ascii=False, indent=2)
+        _atomic_write_json(self.platform_file, stats)
+
+    def register_user(self, username):
+        stats = self._load_platform_stats()
+        stats["总用户数"] = stats.get("总用户数", 0) + 1
+        self._save_platform_stats(stats)
+        self.init_user_stats(username)
+
+    def unregister_user(self, username):
+        stats = self._load_platform_stats()
+        stats["总用户数"] = max(0, stats.get("总用户数", 0) - 1)
+        self._save_platform_stats(stats)
+        self.delete_user_stats(username)
 
     def update_platform_stats(self, photo_info):
         stats = self._load_platform_stats()
@@ -57,7 +99,7 @@ class StatsManager:
 
     def get_platform_stats(self):
         stats = self._load_platform_stats()
-        total = stats.get("总照片数", 1)
+        total = _safe_total(stats)
 
         def get_top3(counter_dict):
             sorted_items = sorted(counter_dict.items(), key=lambda x: x[1], reverse=True)[:3]
@@ -80,10 +122,7 @@ class StatsManager:
 
     def _load_user_stats(self, username):
         user_file = self._get_user_file(username)
-        if os.path.exists(user_file):
-            with open(user_file, 'r', encoding='utf-8') as f:
-                return json.load(f)
-        return {
+        default = {
             "用户名": username,
             "总照片数": 0,
             "省份统计": {},
@@ -93,12 +132,12 @@ class StatsManager:
             "时段统计": {},
             "最后更新": None
         }
+        return _read_json(user_file, default)
 
     def _save_user_stats(self, stats):
         stats["最后更新"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         user_file = self._get_user_file(stats["用户名"])
-        with open(user_file, 'w', encoding='utf-8') as f:
-            json.dump(stats, f, ensure_ascii=False, indent=2)
+        _atomic_write_json(user_file, stats)
 
     def update_user_stats(self, username, photo_info):
         stats = self._load_user_stats(username)
@@ -131,9 +170,18 @@ class StatsManager:
             os.remove(user_file)
         self.init_user_stats(username)
 
+    def delete_user_stats(self, username):
+        user_file = self._get_user_file(username)
+        if os.path.exists(user_file):
+            os.remove(user_file)
+        prefix = f"{username}_"
+        for filename in os.listdir(self.albums_dir):
+            if filename.startswith(prefix) and filename.endswith("_stats.json"):
+                os.remove(os.path.join(self.albums_dir, filename))
+
     def _aggregate_visited(self, username):
         """从用户照片的拍摄地址中聚合省→市→区三级数据，完全依赖'拍摄地址'字段"""
-        user_metadata_file = os.path.join(root_path, "users", username, "photos_metadata.json")
+        user_metadata_file = os.path.join(self.users_base, username, "photos_metadata.json")
         if not os.path.exists(user_metadata_file):
             return {}
         with open(user_metadata_file, 'r', encoding='utf-8') as f:
@@ -165,7 +213,7 @@ class StatsManager:
 
     def get_user_stats(self, username):
         stats = self._load_user_stats(username)
-        total = stats.get("总照片数", 1)
+        total = _safe_total(stats)
 
         def get_top3(counter_dict):
             sorted_items = sorted(counter_dict.items(), key=lambda x: x[1], reverse=True)[:3]
@@ -193,10 +241,7 @@ class StatsManager:
 
     def _load_album_stats(self, username, album_name):
         album_file = self._get_album_file(username, album_name)
-        if os.path.exists(album_file):
-            with open(album_file, 'r', encoding='utf-8') as f:
-                return json.load(f)
-        return {
+        default = {
             "用户名": username,
             "相册名": album_name,
             "总照片数": 0,
@@ -207,12 +252,12 @@ class StatsManager:
             "时段统计": {},
             "最后更新": None
         }
+        return _read_json(album_file, default)
 
     def _save_album_stats(self, stats):
         stats["最后更新"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         album_file = self._get_album_file(stats["用户名"], stats["相册名"])
-        with open(album_file, 'w', encoding='utf-8') as f:
-            json.dump(stats, f, ensure_ascii=False, indent=2)
+        _atomic_write_json(album_file, stats)
 
     def update_album_stats(self, username, album_name, photo_info):
         stats = self._load_album_stats(username, album_name)
@@ -245,9 +290,14 @@ class StatsManager:
             os.remove(album_file)
         self.init_album_stats(username, album_name)
 
+    def delete_album_stats(self, username, album_name):
+        album_file = self._get_album_file(username, album_name)
+        if os.path.exists(album_file):
+            os.remove(album_file)
+
     def get_album_stats(self, username, album_name):
         stats = self._load_album_stats(username, album_name)
-        total = stats.get("总照片数", 1)
+        total = _safe_total(stats)
 
         def get_top3(counter_dict):
             sorted_items = sorted(counter_dict.items(), key=lambda x: x[1], reverse=True)[:3]

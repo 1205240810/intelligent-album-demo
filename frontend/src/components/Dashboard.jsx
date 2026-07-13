@@ -1,4 +1,5 @@
 import { Activity, BarChart3, ChartPie } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import {
   SEASON_COLORS,
   SEASON_ORDER,
@@ -29,7 +30,7 @@ function ChartCard({ icon: Icon, title, subtitle, children, className = '' }) {
 
 const formatNumber = (value) => new Intl.NumberFormat('zh-CN').format(value);
 
-function buildPieOption(photos) {
+function buildPieOption(photos, compact) {
   const pieSource = TYPE_ORDER.map((type) => ({
     name: type,
     value: photos.filter((photo) => photo.type === type).length,
@@ -75,10 +76,12 @@ function buildPieOption(photos) {
         center: ['50%', '45%'],
         padAngle: 2,
         label: {
+          show: !compact,
           color: '#27272a',
           formatter: '{b}\n{d}%',
         },
         labelLine: {
+          show: !compact,
           lineStyle: {
             color: 'rgba(24, 24, 27, 0.28)',
           },
@@ -87,6 +90,23 @@ function buildPieOption(photos) {
       },
     ],
   };
+}
+
+function useCompactCharts() {
+  const query = '(max-width: 520px)';
+  const [compact, setCompact] = useState(() => (
+    typeof window === 'undefined' ? false : window.matchMedia(query).matches
+  ));
+
+  useEffect(() => {
+    const media = window.matchMedia(query);
+    const update = () => setCompact(media.matches);
+    update();
+    media.addEventListener('change', update);
+    return () => media.removeEventListener('change', update);
+  }, []);
+
+  return compact;
 }
 
 function buildTimeOption(photos) {
@@ -298,6 +318,7 @@ function buildFeatureScatterOption(photos) {
 }
 
 export default function Dashboard({ photos, analysis = buildDatasetInsights(photos) }) {
+  const compactCharts = useCompactCharts();
 
   return (
     <div className="border-t border-zinc-200 p-5 sm:p-6 lg:p-7">
@@ -320,7 +341,7 @@ export default function Dashboard({ photos, analysis = buildDatasetInsights(phot
           title="景点分布饼图"
           subtitle={`当前筛选池共 ${formatNumber(photos.length)} 张照片，${analysis.typeSummary.sentence}`}
         >
-          <EChart option={buildPieOption(photos)} className="h-[360px] w-full" />
+          <EChart option={buildPieOption(photos, compactCharts)} className="h-[360px] w-full" />
         </ChartCard>
 
         <div className="grid min-w-0 gap-4">

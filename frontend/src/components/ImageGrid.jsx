@@ -2,8 +2,8 @@ import { ArrowUpRight, ImageOff } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import ScenicImage from './ScenicImage';
 
-const INITIAL_VISIBLE_COUNT = 60;
-const LOAD_MORE_COUNT = 60;
+const INITIAL_VISIBLE_COUNT = 24;
+const LOAD_MORE_COUNT = 24;
 
 function FeatureValue({ label, value }) {
   return (

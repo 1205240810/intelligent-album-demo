@@ -5,14 +5,15 @@
 @layer base {
   :root {
     color-scheme: light;
-    --bg-main: #f6f7f8;
+    --bg-main: #f3f7f6;
     --surface: #ffffff;
-    --surface-deep: #f9fafb;
-    --line: rgba(24, 24, 27, 0.1);
-    --line-strong: rgba(24, 24, 27, 0.28);
-    --text-main: #18181b;
-    --text-muted: #71717a;
-    --accent: #18181b;
+    --surface-deep: #f8fbfa;
+    --line: rgba(15, 118, 110, 0.12);
+    --line-strong: rgba(15, 118, 110, 0.34);
+    --text-main: #17201f;
+    --text-muted: #64706e;
+    --accent: #0f766e;
+    --accent-warm: #d97706;
   }
 
   * {
@@ -29,9 +30,7 @@
     margin: 0;
     min-height: 100dvh;
     overflow-x: hidden;
-    background:
-      linear-gradient(180deg, #ffffff 0%, rgba(250, 250, 250, 0.84) 320px, transparent 680px),
-      linear-gradient(180deg, #f8fafc 0%, #f3f4f6 52%, #eef0f3 100%);
+    background: var(--bg-main);
     color: var(--text-main);
     font-family:
       "PingFang SC",
@@ -58,8 +57,8 @@
   }
 
   ::selection {
-    background: rgba(24, 24, 27, 0.16);
-    color: #18181b;
+    background: rgba(20, 184, 166, 0.2);
+    color: #134e4a;
   }
 }
 
@@ -67,18 +66,19 @@
   .surface-panel {
     border-radius: 0.5rem;
     border: 1px solid var(--line);
-    background:
-      linear-gradient(180deg, rgba(255, 255, 255, 0.82), transparent),
-      var(--surface);
-    box-shadow: 0 18px 56px rgba(15, 23, 42, 0.08);
+    background: var(--surface);
+    box-shadow: 0 16px 48px rgba(15, 118, 110, 0.07);
   }
 
   .metric-card {
     border-radius: 0.5rem;
     border: 1px solid var(--line);
-    background:
-      linear-gradient(180deg, rgba(255, 255, 255, 0.92), transparent 72%),
-      var(--surface-deep);
+    background: var(--surface);
+  }
+
+  .metric-card-accent {
+    border-color: rgba(13, 148, 136, 0.3);
+    background: #f0fdfa;
   }
 
   .section-heading {
@@ -86,11 +86,11 @@
   }
 
   .section-kicker {
-    @apply text-sm font-medium text-zinc-700;
+    @apply text-sm font-semibold text-teal-700;
   }
 
   .section-title {
-    @apply text-2xl font-semibold tracking-tight text-zinc-950 sm:text-3xl;
+    @apply text-2xl font-semibold text-zinc-950 sm:text-3xl;
     font-family:
       "SF Pro Display",
       "Segoe UI Semibold",
@@ -100,7 +100,7 @@
   }
 
   .nav-link {
-    @apply rounded-lg px-3 py-2 transition hover:bg-zinc-50 hover:text-zinc-900;
+    @apply rounded-lg px-3 py-2 transition hover:bg-teal-50 hover:text-teal-800;
   }
 
 }
@@ -110,12 +110,12 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(24, 24, 27, 0.05);
+  background: rgba(15, 118, 110, 0.05);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(24, 24, 27, 0.28);
-  border: 2px solid #f6f7f8;
+  background: rgba(15, 118, 110, 0.32);
+  border: 2px solid var(--bg-main);
   border-radius: 999px;
 }
 

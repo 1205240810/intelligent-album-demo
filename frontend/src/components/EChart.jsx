@@ -30,9 +30,21 @@ export default function EChart({ option, className = 'h-80 w-full' }) {
     });
 
     instanceRef.current = instance;
+    let animationFrame = 0;
+    let lastWidth = 0;
+    let lastHeight = 0;
 
     const resize = () => {
-      instance.resize();
+      window.cancelAnimationFrame(animationFrame);
+      animationFrame = window.requestAnimationFrame(() => {
+        const { width, height } = chartRef.current?.getBoundingClientRect() ?? {};
+        if (!width || !height || (width === lastWidth && height === lastHeight)) {
+          return;
+        }
+        lastWidth = width;
+        lastHeight = height;
+        instance.resize({ width, height });
+      });
     };
 
     const observer =
@@ -44,6 +56,7 @@ export default function EChart({ option, className = 'h-80 w-full' }) {
     return () => {
       observer?.disconnect();
       window.removeEventListener('resize', resize);
+      window.cancelAnimationFrame(animationFrame);
       instance.dispose();
       instanceRef.current = null;
     };

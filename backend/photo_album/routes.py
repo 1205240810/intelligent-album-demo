@@ -1,13 +1,15 @@
 import os
 import json
 import shutil
+import tempfile
 from datetime import datetime
+from pathlib import Path
 from urllib.parse import quote
 
 from flask import Blueprint, abort, jsonify, request, send_file
 from werkzeug.utils import secure_filename
 from image_analyzer import get_image_metadata
-from stats_manager import StatsManager
+from stats_manager import StatsManager, _atomic_write_json
 from config import BAIDU_AK
 
 
@@ -19,7 +21,7 @@ USERS_BASE = os.path.join(root_path, "users")
 os.makedirs(USERS_BASE, exist_ok=True)
 
 # 初始化统计管理器（统计数据保存在后端 data 目录）
-stats_mgr = StatsManager(os.path.join(root_path, "data"))
+stats_mgr = StatsManager(os.path.join(root_path, "data"), USERS_BASE)
 IMAGE_EXTENSIONS = {".jpg", ".jpeg", ".png", ".gif", ".webp", ".bmp"}
 CONTRACT_TYPES = {
     "山景",
@@ -63,9 +65,39 @@ ADDRESS_TYPE_HINTS = [
     ("现代化大都市", ("商场", "购物中心", "广场", "大厦", "中心", "万象城", "银泰", "中骏")),
     ("乡村田园", ("乡村", "田园", "农庄", "村")),
 ]
+MAX_NAME_LENGTH = 100
 
 
 # ==================== 辅助函数 ====================
+def _json_body():
+    payload = request.get_json(silent=True)
+    return payload if isinstance(payload, dict) else None
+
+
+def _safe_segment(value):
+    if not isinstance(value, str):
+        return None
+    normalized = value.strip()
+    if not normalized or len(normalized) > MAX_NAME_LENGTH or normalized in {".", ".."}:
+        return None
+    if any(character in normalized for character in ("/", "\\", "\x00")):
+        return None
+    if any(ord(character) < 32 for character in normalized):
+        return None
+    return normalized
+
+
+def _unique_filename(directory, filename):
+    stem = Path(filename).stem
+    suffix = Path(filename).suffix.lower()
+    candidate = f"{stem}{suffix}"
+    counter = 2
+    while os.path.exists(os.path.join(directory, candidate)):
+        candidate = f"{stem}-{counter}{suffix}"
+        counter += 1
+    return candidate
+
+
 def _update_stats_decrement(stats, target_info):
     """从统计字典中减去 target_info 中的各项计数"""
     stats["总照片数"] = max(0, stats.get("总照片数", 0) - 1)
@@ -84,9 +116,24 @@ def _update_stats_decrement(stats, target_info):
                 del stats[stat_key][val]
 
 
+def _subtract_aggregate_stats(target_stats, source_stats):
+    target_stats["总照片数"] = max(
+        0,
+        target_stats.get("总照片数", 0) - source_stats.get("总照片数", 0),
+    )
+    for field in ("省份统计", "景点类型统计", "品牌统计", "季节统计", "时段统计"):
+        target_counter = target_stats.setdefault(field, {})
+        for key, count in source_stats.get(field, {}).items():
+            target_counter[key] = max(0, target_counter.get(key, 0) - count)
+            if target_counter[key] == 0:
+                del target_counter[key]
+
+
 def _safe_users_path(*parts):
+    if any(not isinstance(part, str) or not part for part in parts):
+        return None
     base = os.path.realpath(USERS_BASE)
-    candidate = os.path.realpath(os.path.join(USERS_BASE, *[p for p in parts if p]))
+    candidate = os.path.realpath(os.path.join(USERS_BASE, *parts))
     if candidate == base or candidate.startswith(base + os.sep):
         return candidate
     return None
@@ -134,12 +181,29 @@ def _iter_album_images(username, album_name):
     return images
 
 
+def _iter_user_original_images(username):
+    user_dir = _safe_users_path(username)
+    if not user_dir or not os.path.isdir(user_dir):
+        return []
+    images = []
+    for current_dir, directory_names, filenames in os.walk(user_dir):
+        directory_names[:] = [name for name in directory_names if name != "thumbnails"]
+        for filename in filenames:
+            image_path = os.path.join(current_dir, filename)
+            if _is_image_file(image_path):
+                images.append(image_path)
+    return images
+
+
 def _delete_photo_files(username, album_name, filename):
+    thumbnail_name = f"{Path(filename).stem}.jpg"
     candidates = [
         _safe_users_path(username, album_name, "photos", filename),
         _safe_users_path(username, album_name, "thumbnails", filename),
+        _safe_users_path(username, album_name, "thumbnails", thumbnail_name),
         _safe_users_path(username, "photos", album_name, filename),
         _safe_users_path(username, "thumbnails", album_name, filename),
+        _safe_users_path(username, "thumbnails", album_name, thumbnail_name),
     ]
     for candidate in candidates:
         if candidate and os.path.isfile(candidate):
@@ -175,12 +239,14 @@ def _save_photo_metadata(username, photo_info):
         if not (photo.get("filename") == filename and photo.get("album_name") == album_name)
     ]
     all_photos.append(photo_info)
-    with open(user_meta_file, "w", encoding="utf-8") as f:
-        json.dump(all_photos, f, ensure_ascii=False, indent=2)
+    _atomic_write_json(user_meta_file, all_photos)
 
 
 def _relative_media_path(image_path):
-    return os.path.relpath(image_path, USERS_BASE).replace(os.sep, "/")
+    return os.path.relpath(os.path.realpath(image_path), os.path.realpath(USERS_BASE)).replace(
+        os.sep,
+        "/",
+    )
 
 
 def _media_url(image_path):
@@ -254,12 +320,19 @@ def _estimate_image_features(image_path):
             hsv = rgb.convert("HSV")
             saturation = ImageStat.Stat(hsv.split()[1]).mean[0] / 255
             brightness = ImageStat.Stat(hsv.split()[2]).mean[0] / 255
+            pixels = list(hsv.getdata())
+            dark_ratio = sum(1 for _hue, _saturation, value in pixels if value < 64) / max(
+                1,
+                len(pixels),
+            )
             edge_map = rgb.convert("L").filter(ImageFilter.FIND_EDGES)
             edge_mean = ImageStat.Stat(edge_map).mean[0] / 255
 
         return {
-            "color_score": _clamp_score(0.7 * saturation + 0.3 * brightness),
-            "texture_complexity": _clamp_score(edge_mean * 2.8),
+            "color_score": _clamp_score(
+                0.68 * saturation + 0.24 * brightness + 0.08 * (1 - dark_ratio)
+            ),
+            "texture_complexity": _clamp_score(edge_mean * 3.1),
         }
     except Exception:
         return {
@@ -318,10 +391,10 @@ def _updated_at(image_paths, username):
 
 @api.route("/api/photos", methods=["GET"])
 def get_photos():
-    username = (request.args.get("username") or "张三").strip()
-    album_name = (request.args.get("album_name") or "我的照片").strip()
+    username = _safe_segment(request.args.get("username") or "张三")
+    album_name = _safe_segment(request.args.get("album_name") or "我的照片")
     if not username or not album_name:
-        return jsonify({"error": "用户名和相册名不能为空"}), 400
+        return jsonify({"error": "用户名或相册名为空或包含非法字符"}), 400
     if not _safe_users_path(username) or not _safe_users_path(username, "photos", album_name):
         return jsonify({"error": "非法路径"}), 400
 
@@ -357,31 +430,34 @@ def get_media(media_path):
 # ==================== 用户注册 ====================
 @api.route('/register', methods=['POST'])
 def register():
-    data = request.get_json()
-    username = data.get('username')
+    data = _json_body()
+    if data is None:
+        return jsonify({"error": "请求体必须是 JSON 对象"}), 400
+    username = _safe_segment(data.get('username'))
     if not username:
-        return jsonify({"error": "用户名不能为空"}), 400
-    user_dir = os.path.join(USERS_BASE, username)
+        return jsonify({"error": "用户名为空或包含非法字符"}), 400
+    user_dir = _safe_users_path(username)
     if os.path.exists(user_dir):
         return jsonify({"error": "用户已存在"}), 400
     os.makedirs(user_dir, exist_ok=True)
-    # 初始化用户统计（stats_manager 的方法）
-    stats_mgr.init_user_stats(username)
+    stats_mgr.register_user(username)
     return jsonify({"message": f"用户 {username} 注册成功"})
 
 
 # ==================== 创建相册 ====================
 @api.route('/create_album', methods=['POST'])
 def create_album():
-    data = request.get_json()
-    username = data.get('username')
-    album_name = data.get('album_name')
+    data = _json_body()
+    if data is None:
+        return jsonify({"error": "请求体必须是 JSON 对象"}), 400
+    username = _safe_segment(data.get('username'))
+    album_name = _safe_segment(data.get('album_name'))
     if not username or not album_name:
-        return jsonify({"error": "用户名和相册名不能为空"}), 400
-    user_dir = os.path.join(USERS_BASE, username)
+        return jsonify({"error": "用户名或相册名为空或包含非法字符"}), 400
+    user_dir = _safe_users_path(username)
     if not os.path.exists(user_dir):
         return jsonify({"error": "用户不存在，请先注册"}), 400
-    album_dir = os.path.join(user_dir, album_name)
+    album_dir = _safe_users_path(username, album_name)
     if os.path.exists(album_dir):
         return jsonify({"error": "相册已存在"}), 400
     os.makedirs(os.path.join(album_dir, "photos"), exist_ok=True)
@@ -393,37 +469,55 @@ def create_album():
 # ==================== 上传照片 ====================
 @api.route('/upload', methods=['POST'])
 def upload_photo():
-    username = request.form.get('username')
-    album_name = request.form.get('album_name')
+    username = _safe_segment(request.form.get('username'))
+    album_name = _safe_segment(request.form.get('album_name'))
     file = request.files.get('photo')
     if not all([username, album_name, file]):
-        return jsonify({"error": "缺少参数"}), 400
+        return jsonify({"error": "缺少参数，或用户名/相册名包含非法字符"}), 400
 
     filename = secure_filename(file.filename or "")
     if not filename:
         filename = f"photo_{datetime.now().strftime('%Y%m%d%H%M%S')}.jpg"
-    album_dir = os.path.join(USERS_BASE, username, album_name)
-    photos_dir = os.path.join(album_dir, "photos")
-    thumbs_dir = os.path.join(album_dir, "thumbnails")
+    extension = Path(filename).suffix.lower()
+    if extension not in IMAGE_EXTENSIONS:
+        return jsonify({"error": "仅支持 jpg、jpeg、png、gif、webp、bmp 图片"}), 400
+
+    album_dir = _safe_users_path(username, album_name)
+    if not album_dir or not os.path.isdir(album_dir):
+        return jsonify({"error": "用户或相册不存在，请先注册并创建相册"}), 404
+    photos_dir = _safe_users_path(username, album_name, "photos")
+    thumbs_dir = _safe_users_path(username, album_name, "thumbnails")
     os.makedirs(photos_dir, exist_ok=True)
     os.makedirs(thumbs_dir, exist_ok=True)
 
-    # 保存原图
-    original_path = os.path.join(photos_dir, filename)
-    file.save(original_path)
+    filename = _unique_filename(photos_dir, filename)
+    descriptor, temporary_path = tempfile.mkstemp(prefix=".upload-", dir=photos_dir)
+    os.close(descriptor)
+    try:
+        file.save(temporary_path)
+        from PIL import Image, UnidentifiedImageError
+
+        try:
+            with Image.open(temporary_path) as candidate:
+                candidate.verify()
+        except (UnidentifiedImageError, OSError, ValueError, SyntaxError):
+            return jsonify({"error": "上传文件不是有效图片"}), 400
+
+        original_path = os.path.join(photos_dir, filename)
+        os.replace(temporary_path, original_path)
+    finally:
+        if os.path.exists(temporary_path):
+            os.remove(temporary_path)
 
     # 生成缩略图（去除EXIF）
     try:
         from PIL import Image
-        img = Image.open(original_path)
-        # 调整大小（可选，例如宽度不超过1200）
-        img.thumbnail((1200, 1200), Image.Resampling.LANCZOS)
-        # 保存为JPEG，不保留exif
-        thumb_path = os.path.join(thumbs_dir, filename)
-        # 如果是PNG，可能需要转换；简单处理：保存为JPEG
-        if img.mode in ('RGBA', 'P'):
-            img = img.convert('RGB')
-        img.save(thumb_path, 'JPEG', quality=85, optimize=True, exif=b'')
+
+        with Image.open(original_path) as source_image:
+            image = source_image.convert('RGB')
+            image.thumbnail((1200, 1200), Image.Resampling.LANCZOS)
+            thumb_path = os.path.join(thumbs_dir, f"{Path(filename).stem}.jpg")
+            image.save(thumb_path, 'JPEG', quality=85, optimize=True, exif=b'')
     except Exception as e:
         print(f"生成缩略图失败: {e}")
 
@@ -432,13 +526,13 @@ def upload_photo():
     photo_info["filename"] = filename
     photo_info["album_name"] = album_name
 
+    # 保存照片元数据到用户级文件（用于 visited 树），同相册同文件名覆盖旧记录
+    _save_photo_metadata(username, photo_info)
+
     # 更新三层统计
     stats_mgr.update_album_stats(username, album_name, photo_info)
     stats_mgr.update_user_stats(username, photo_info)
     stats_mgr.update_platform_stats(photo_info)
-
-    # 保存照片元数据到用户级文件（用于 visited 树），同相册同文件名覆盖旧记录
-    _save_photo_metadata(username, photo_info)
 
     return jsonify({
         "photo_info": photo_info,
@@ -448,59 +542,23 @@ def upload_photo():
     })
 
 
-def _aggregate_visited(self, username):
-    """从 photos_metadata.json 中解析省→市→区树，若失败则回退到用户统计中的省份"""
-    visited = {}
-
-    # 1. 尝试从 photos_metadata.json 读取
-    user_metadata_file = os.path.join(root_path,"users", username, "photos_metadata.json")
-    if os.path.exists(user_metadata_file):
-        with open(user_metadata_file, 'r', encoding='utf-8') as f:
-            photos = json.load(f)
-        for photo in photos:
-            address = photo.get("拍摄地址", "")
-            if address and "·" in address:
-                parts = [p.strip() for p in address.split("·") if p.strip()]
-                if len(parts) >= 1:
-                    province = parts[0]
-                    city = parts[1] if len(parts) >= 2 else "未知市"
-                    district = parts[2] if len(parts) >= 3 else "未知区"
-                    visited.setdefault(province, {}).setdefault(city, set()).add(district)
-            else:
-                # 如果没有完整地址，尝试使用省份字段
-                province = photo.get("省份")
-                if province:
-                    visited.setdefault(province, {}).setdefault("未知市", set()).add("未知区")
-        # 如果有解析结果，转换 set 为 list 后返回
-        if visited:
-            for p in visited:
-                for c in visited[p]:
-                    visited[p][c] = list(visited[p][c])
-            return visited
-
-    # 2. 兜底：从用户统计中的省份统计生成
-    stats = self._load_user_stats(username)
-    provinces = stats.get("省份统计",{}).keys()
-    for province in provinces:
-        visited[province] = {"未知市": ["未知区"]}
-    return visited
-
 # ==================== 删除单张照片 ====================
 @api.route('/delete_photo', methods=['POST'])
 def delete_photo():
-    data = request.get_json()
-    username = data.get('username')
-    album_name = data.get('album_name')
-    filename = data.get('filename')
+    data = _json_body()
+    if data is None:
+        return jsonify({"error": "请求体必须是 JSON 对象"}), 400
+    username = _safe_segment(data.get('username'))
+    album_name = _safe_segment(data.get('album_name'))
+    filename = secure_filename(data.get('filename') or "")
     if not all([username, album_name, filename]):
-        return jsonify({"error": "缺少参数"}), 400
+        return jsonify({"error": "缺少参数，或参数包含非法字符"}), 400
 
     # 1. 查找照片元数据
     user_meta_file = _metadata_file(username)
     if not user_meta_file or not os.path.exists(user_meta_file):
-        return jsonify({"error": "元数据文件不存在"}), 500
-    with open(user_meta_file, 'r', encoding='utf-8') as f:
-        all_photos = json.load(f)
+        return jsonify({"error": "元数据文件不存在，已拒绝删除以避免统计漂移"}), 409
+    all_photos = _load_user_metadata(username)
     target = None
     for p in all_photos:
         if p.get('filename') == filename and p.get('album_name') == album_name:
@@ -522,8 +580,7 @@ def delete_photo():
         p for p in all_photos
         if not (p is target or (p.get('filename') == filename and p.get('album_name') == album_name))
     ]
-    with open(user_meta_file, 'w', encoding='utf-8') as f:
-        json.dump(all_photos, f, ensure_ascii=False, indent=2)
+    _atomic_write_json(user_meta_file, all_photos)
 
     # 4. 更新三层统计（减去计数）
     # 相册统计
@@ -547,11 +604,13 @@ def delete_photo():
 # ==================== 删除整个相册 ====================
 @api.route('/delete_album', methods=['POST'])
 def delete_album():
-    data = request.get_json()
-    username = data.get('username')
-    album_name = data.get('album_name')
+    data = _json_body()
+    if data is None:
+        return jsonify({"error": "请求体必须是 JSON 对象"}), 400
+    username = _safe_segment(data.get('username'))
+    album_name = _safe_segment(data.get('album_name'))
     if not username or not album_name:
-        return jsonify({"error": "缺少参数"}), 400
+        return jsonify({"error": "缺少参数，或参数包含非法字符"}), 400
 
     album_dirs = _album_delete_dirs(username, album_name)
     if not album_dirs:
@@ -561,13 +620,14 @@ def delete_album():
     # 1. 获取该相册的所有照片元数据
     user_meta_file = _metadata_file(username)
     if not user_meta_file or not os.path.exists(user_meta_file):
-        # 没有元数据文件，只能直接删除文件夹，但统计会乱，建议先上传过照片
-        for album_dir in album_dirs:
-            shutil.rmtree(album_dir)
-        return jsonify({"error": "元数据文件缺失，相册已删除但统计未更新"}), 500
+        if not album_filenames:
+            for album_dir in album_dirs:
+                shutil.rmtree(album_dir)
+            stats_mgr.delete_album_stats(username, album_name)
+            return jsonify({"message": "相册已删除（无照片）"})
+        return jsonify({"error": "元数据文件缺失，已拒绝删除以避免统计漂移"}), 409
 
-    with open(user_meta_file, 'r', encoding='utf-8') as f:
-        all_photos = json.load(f)
+    all_photos = _load_user_metadata(username)
 
     album_photos = [
         p for p in all_photos
@@ -577,7 +637,7 @@ def delete_album():
         # 没有照片，直接删除文件夹和统计
         for album_dir in album_dirs:
             shutil.rmtree(album_dir)
-        stats_mgr.reset_album_stats(username, album_name)
+        stats_mgr.delete_album_stats(username, album_name)
         return jsonify({"message": "相册已删除（无照片）"})
 
     # 2. 从用户统计和平台统计中减去该相册所有照片的计数
@@ -594,15 +654,14 @@ def delete_album():
         shutil.rmtree(album_dir)
 
     # 4. 删除相册统计文件
-    stats_mgr.reset_album_stats(username, album_name)
+    stats_mgr.delete_album_stats(username, album_name)
 
     # 5. 从用户元数据中移除这些照片记录
     remaining_photos = [
         p for p in all_photos
         if not (p.get('album_name') == album_name or p.get('filename') in album_filenames)
     ]
-    with open(user_meta_file, 'w', encoding='utf-8') as f:
-        json.dump(remaining_photos, f, ensure_ascii=False, indent=2)
+    _atomic_write_json(user_meta_file, remaining_photos)
 
     return jsonify({"message": "相册删除成功", "user_stats": user_stats, "platform_stats": platform_stats})
 
@@ -610,31 +669,34 @@ def delete_album():
 # ==================== 注销用户 ====================
 @api.route('/delete_user', methods=['POST'])
 def delete_user():
-    data = request.get_json()
-    username = data.get('username')
+    data = _json_body()
+    if data is None:
+        return jsonify({"error": "请求体必须是 JSON 对象"}), 400
+    username = _safe_segment(data.get('username'))
     if not username:
-        return jsonify({"error": "缺少用户名"}), 400
+        return jsonify({"error": "缺少用户名，或用户名包含非法字符"}), 400
 
-    user_dir = os.path.join(USERS_BASE, username)
+    user_dir = _safe_users_path(username)
     if not os.path.exists(user_dir):
         return jsonify({"error": "用户不存在"}), 404
 
-    # 1. 获取该用户所有照片元数据
-    user_meta_file = os.path.join(USERS_BASE, username, "photos_metadata.json")
-    if os.path.exists(user_meta_file):
-        with open(user_meta_file, 'r', encoding='utf-8') as f:
-            all_photos = json.load(f)
-        # 从平台统计中减去该用户所有照片的贡献
-        platform_stats = stats_mgr._load_platform_stats()
-        for p in all_photos:
-            _update_stats_decrement(platform_stats, p)
-        stats_mgr._save_platform_stats(platform_stats)
+    # 1. 用用户级汇总一次性扣减平台统计，避免依赖逐张元数据。
+    physical_images = _iter_user_original_images(username)
+    user_stats_file = stats_mgr._get_user_file(username)
+    if physical_images and not os.path.exists(user_stats_file):
+        return jsonify({"error": "用户统计缺失，已拒绝注销以避免统计漂移"}), 409
+    user_stats = stats_mgr._load_user_stats(username)
+    if len(physical_images) != user_stats.get("总照片数", 0):
+        return jsonify({"error": "照片数量与用户统计不一致，已拒绝注销"}), 409
+    platform_stats = stats_mgr._load_platform_stats()
+    _subtract_aggregate_stats(platform_stats, user_stats)
+    stats_mgr._save_platform_stats(platform_stats)
 
     # 2. 删除用户文件夹
     shutil.rmtree(user_dir)
 
     # 3. 删除用户统计文件
-    stats_mgr.reset_user_stats(username)
+    stats_mgr.unregister_user(username)
 
     return jsonify({"message": "用户注销成功"})
 
@@ -642,8 +704,8 @@ def delete_user():
 # ==================== 获取统计接口 ====================
 @api.route('/stats/album', methods=['GET'])
 def get_album_stats():
-    username = request.args.get('username')
-    album_name = request.args.get('album_name')
+    username = _safe_segment(request.args.get('username'))
+    album_name = _safe_segment(request.args.get('album_name'))
     if not username or not album_name:
         return jsonify({"error": "缺少参数"}), 400
     return jsonify(stats_mgr.get_album_stats(username, album_name))
@@ -651,7 +713,7 @@ def get_album_stats():
 
 @api.route('/stats/user', methods=['GET'])
 def get_user_stats():
-    username = request.args.get('username')
+    username = _safe_segment(request.args.get('username'))
     if not username:
         return jsonify({"error": "缺少用户名"}), 400
     return jsonify(stats_mgr.get_user_stats(username))

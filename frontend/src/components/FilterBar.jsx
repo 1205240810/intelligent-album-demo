@@ -6,14 +6,14 @@ function QueryField({ icon: Icon, id, label, options, value, onChange }) {
   return (
     <label htmlFor={fieldId} className="grid gap-2">
       <span className="flex items-center gap-2 text-xs font-medium text-zinc-600">
-        {Icon ? <Icon className="h-3.5 w-3.5 text-zinc-950" /> : null}
+        {Icon ? <Icon className="h-3.5 w-3.5 text-teal-700" /> : null}
         {label}
       </span>
       <select
         id={fieldId}
         value={value}
         onChange={(event) => onChange(event.target.value)}
-        className="h-10 w-full rounded-lg border border-zinc-200 bg-white px-3 text-sm text-zinc-900 outline-none transition focus:border-zinc-950/40 focus:ring-2 focus:ring-zinc-950/10"
+        className="h-10 w-full rounded-lg border border-zinc-200 bg-white px-3 text-sm text-zinc-900 outline-none transition focus:border-teal-600 focus:ring-2 focus:ring-teal-600/10"
       >
         {options.map((option) => (
           <option key={option} value={option}>
@@ -37,7 +37,7 @@ export default function FilterBar({
     <section className="surface-panel p-4 sm:p-5" aria-label="照片筛选查询构造器">
       <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
         <div className="flex min-w-0 items-center gap-3">
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-zinc-200 bg-zinc-100 text-zinc-950">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-teal-700 text-white">
             <SlidersHorizontal className="h-5 w-5" />
           </div>
           <div className="min-w-0">
@@ -47,8 +47,8 @@ export default function FilterBar({
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
-          <div className="rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-2 text-sm text-zinc-700">
-            命中 <span className="font-semibold text-zinc-950">{resultCount}</span>
+          <div className="rounded-lg bg-teal-50 px-3 py-2 text-sm text-teal-800">
+            命中 <span className="font-semibold text-teal-950">{resultCount}</span>
             <span className="text-zinc-500"> / {totalCount}</span>
           </div>
           <button
@@ -69,7 +69,7 @@ export default function FilterBar({
         ))}
       </div>
 
-      <div className="mt-4 flex flex-col gap-2 rounded-lg border border-zinc-200 bg-white px-3 py-3 text-sm sm:flex-row sm:items-center sm:justify-between">
+      <div className="mt-4 flex flex-col gap-2 rounded-lg border border-teal-100 bg-teal-50/60 px-3 py-3 text-sm sm:flex-row sm:items-center sm:justify-between">
         <span className="text-zinc-500">当前查询</span>
         <span className="font-medium text-zinc-800">{summary}</span>
       </div>

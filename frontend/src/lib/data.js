@@ -4,13 +4,13 @@ import {
   TIME_ORDER,
   TYPE_ORDER,
   resolvePublicAssetUrl,
-} from '../constants/filters';
-import { generateSamplePhotos } from './sampleData';
+} from '../constants/filters.js';
+import { generateSamplePhotos } from './sampleData.js';
 
 const fallbackByIndex = (items, index) => items[index % items.length];
 const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
-const API_ENDPOINT = import.meta.env.VITE_PHOTO_DATA_API_URL?.trim();
-const LOCAL_DATA_URL = `${import.meta.env.BASE_URL}data.json`;
+const API_ENDPOINT = import.meta.env?.VITE_PHOTO_DATA_API_URL?.trim();
+const LOCAL_DATA_URL = `${import.meta.env?.BASE_URL || './'}data.json`;
 
 function normalizeFeatureScore(value) {
   if (value === null || value === undefined || value === '') {
@@ -26,7 +26,7 @@ function normalizeFeatureScore(value) {
   return Number(clamp(numericValue, 0, 1).toFixed(2));
 }
 
-function normalizePhoto(photo, index) {
+export function normalizePhoto(photo, index) {
   const fallbackType = fallbackByIndex(TYPE_ORDER, index);
   const type = TYPE_ORDER.includes(photo?.type) ? photo.type : fallbackType;
   const time = TIME_ORDER.includes(photo?.time) ? photo.time : fallbackByIndex(TIME_ORDER, index);
@@ -52,7 +52,7 @@ function normalizePhoto(photo, index) {
   };
 }
 
-function withStableUniqueIds(photos) {
+export function withStableUniqueIds(photos) {
   const usedIds = new Set();
 
   return photos.map((photo, index) => {
@@ -73,7 +73,7 @@ function withStableUniqueIds(photos) {
   });
 }
 
-function extractPhotoArray(payload) {
+export function extractPhotoArray(payload) {
   if (Array.isArray(payload)) {
     return payload;
   }
@@ -166,6 +166,7 @@ export async function loadPhotoDataset() {
           endpoint: LOCAL_DATA_URL,
           source: 'file',
           warning: apiError,
+          warningKind: 'api',
         };
       } catch (fileError) {
         const embeddedResult = readEmbeddedDataset();
@@ -175,6 +176,7 @@ export async function loadPhotoDataset() {
             ...embeddedResult,
             source: 'file',
             warning: apiError,
+            warningKind: 'api',
             error: fileError,
           };
         }
@@ -206,6 +208,7 @@ export async function loadPhotoDataset() {
         ...embeddedResult,
         source: 'file',
         warning: error,
+        warningKind: 'file',
       };
     }
 

@@ -20,7 +20,7 @@ export const TYPE_ORDER = TYPE_OPTIONS.slice(1);
 export const TIME_ORDER = TIME_OPTIONS.slice(1);
 export const SEASON_ORDER = SEASON_OPTIONS.slice(1);
 
-const PUBLIC_BASE_URL = import.meta.env.BASE_URL || './';
+const PUBLIC_BASE_URL = import.meta.env?.BASE_URL || './';
 
 export function resolvePublicAssetUrl(path) {
   if (typeof path !== 'string' || !path.trim()) {

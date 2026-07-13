@@ -5,9 +5,17 @@
   "scripts": {
     "dev": "npm --prefix frontend run dev",
     "build": "npm --prefix frontend run build",
+    "build:single": "backend/photo_album/.venv/bin/python scripts/build_single_assets.py && npm --prefix frontend run build:single",
     "preview": "npm --prefix frontend run preview",
     "generate:data": "npm --prefix frontend run generate:data",
-    "backend:dev": "python3 backend/photo_album/app.py",
-    "backend:check": "PYTHONPYCACHEPREFIX=/private/tmp/intelligent_album_pycache python3 -m py_compile backend/photo_album/*.py"
+    "backend:dev": "backend/photo_album/.venv/bin/python backend/photo_album/app.py",
+    "backend:check": "PYTHONPYCACHEPREFIX=/private/tmp/intelligent_album_pycache python3 -m py_compile backend/photo_album/*.py",
+    "test:frontend": "npm --prefix frontend test",
+    "test:backend": "backend/photo_album/.venv/bin/python -m unittest discover -s backend/tests -v",
+    "test": "npm run test:frontend && npm run test:backend",
+    "data:check": "backend/photo_album/.venv/bin/python scripts/validate_dataset.py",
+    "verify": "npm run backend:check && npm run data:check && npm test && npm run build",
+    "deploy:cloudbase:prepare": "npm run build && node scripts/prepare-cloudbase-function.mjs",
+    "package:submission": "node scripts/package-submission.mjs"
   }
 }

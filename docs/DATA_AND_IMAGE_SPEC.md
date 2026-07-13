@@ -90,8 +90,8 @@ frontend/scripts/generate_real_dataset.py
 - `time`：优先使用文件名中的 `IMG_YYYYMMDD_HHMMSS`，其次使用 EXIF 拍摄时间；`6:00` 到 `18:00` 之间为 `白天`，其他为 `黑夜`
 - `season`：由拍摄月份映射，`3-5` 为春，`6-8` 为夏，`9-11` 为秋，`12-2` 为冬
 - `type`：静态生成脚本根据 HSV 颜色占比、亮度、暗部比例和边缘强度做轻量推断；后端真实流程会结合 EXIF、GPS 地址反查、关键词映射和已有元数据
-- `color_score`：由饱和度、亮度、暗部比例综合估算
-- `texture_complexity`：由灰度边缘强度估算
+- `color_score`：设平均饱和度为 `S`、平均亮度为 `V`、暗像素比例为 `D`，计算 `clamp(0.68S + 0.24V + 0.08(1-D), 0, 1)`
+- `texture_complexity`：设灰度边缘图平均强度为 `E`，计算 `clamp(3.1E, 0, 1)`
 
 这些规则适合演示和兜底；如果后端后续接入更正式的图像识别模型，只要输出同样字段，前端不用改。
 
@@ -103,7 +103,7 @@ frontend/scripts/generate_real_dataset.py
 - 推荐命名：英文、数字、连字符，避免空格
 - 本地展示路径：`/images/real/文件名.jpg`
 
-页面会根据 Vite `base` 将 `/images/...` 归一化为当前部署位置下的资源地址，支持子目录部署和 `file://` 预览。
+页面会根据 Vite `base` 将 `/images/...` 归一化为当前部署位置下的资源地址。普通生产包需要保留整个 `dist/` 目录；自包含单文件会把所有图片转换为压缩 Data URL，适合 `file://` 双击预览。
 
 ## 静态交付
 
@@ -111,7 +111,23 @@ frontend/scripts/generate_real_dataset.py
 npm run build
 ```
 
-构建结果在 `frontend/dist/`。构建脚本会把当前 `frontend/public/data.json` 内嵌到 `dist/index.html`，所以只复制 `frontend/dist/` 也能离线查看当前数据版本。
+构建结果在 `frontend/dist/`。数据会内嵌到 `index.html`，图片仍在 `dist/images/real/`，因此需要复制整个目录。
+
+生成真正自包含的单文件：
+
+```bash
+npm run build:single
+```
+
+输出为 `output/cos-single/index.html`。脚本把 76 张图片压缩到最长边 1000px 并内嵌，不修改公开源码图片。
+
+提交前执行：
+
+```bash
+npm run data:check
+```
+
+该检查要求 JSON 与图片一一对应、ID 唯一、分数在 `0–1` 内，并确认公开图片不含 EXIF。
 
 ## 常见问题
 

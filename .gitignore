@@ -2,7 +2,9 @@ node_modules/
 frontend/node_modules/
 dist/
 frontend/dist/
+frontend/single-dist/
 .vercel/
+.playwright-cli/
 .DS_Store
 *.log
 npm-debug.log*
@@ -13,6 +15,9 @@ pnpm-debug.log*
 # Local-only sources, generated reports, and runtime state.
 /assets/
 /output/
+/release/
+/submission/*.ppt
+/submission/*.pptx
 /data/raw/
 backend/photo_album/.idea/
 backend/photo_album/.venv/
