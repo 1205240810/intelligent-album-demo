@@ -134,6 +134,9 @@ copyDirectory('docs');
 copyDirectory('scripts');
 
 const documentCopies = [
+  ['FINAL_DELIVERY.md', '完整交付文档.md'],
+  ['智能相册分析系统-完整交付文档.docx', '完整交付文档.docx'],
+  ['演示界面.png', '演示界面.png'],
   ['PROJECT_REPORT.md', '项目说明书.md'],
   ['TEST_REPORT.md', '测试报告.md'],
   ['DEMO_GUIDE.md', '演示与运行指南.md'],

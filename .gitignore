@@ -27,3 +27,8 @@ backend/photo_album/data/*
 !backend/photo_album/data/.gitkeep
 backend/photo_album/users/*
 !backend/photo_album/users/.gitkeep
+# User-provided presentation and local packaging inputs
+/*.pptx
+/*.ppt
+/tmp/
+/submission/*/

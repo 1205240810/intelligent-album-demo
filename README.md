@@ -82,7 +82,7 @@ npm run verify          # 语法、数据、前后端测试和生产构建
 npm run build:single    # 生成 output/cos-single/index.html
 ```
 
-将组员 PPT 命名为 `submission/智能相册分析系统-答辩.pptx` 后执行：
+组员 PPT 已按 `submission/智能相册分析系统-答辩.pptx` 纳入交付流程。生成最终包时执行：
 
 ```bash
 npm run package:submission
@@ -105,6 +105,9 @@ npm run package:submission
 
 ## 文档
 
+- [完整交付文档](docs/FINAL_DELIVERY.md)
+- [完整交付文档（Word）](docs/智能相册分析系统-完整交付文档.docx)
+- [演示界面截图](docs/演示界面.png)
 - [项目说明书](docs/PROJECT_REPORT.md)
 - [测试报告](docs/TEST_REPORT.md)
 - [演示与运行指南](docs/DEMO_GUIDE.md)
