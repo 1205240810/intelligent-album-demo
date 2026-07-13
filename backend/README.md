@@ -14,13 +14,13 @@ npm run backend:dev
 
 默认地址：<http://127.0.0.1:8080/>。
 
-可选环境变量：
+复制本地配置模板：
 
 ```bash
-export BAIDU_AK=你的百度地图AK
-export CORS_ALLOW_ORIGIN=http://127.0.0.1:5173
-export MAX_UPLOAD_MB=20
+cp backend/photo_album/.env.example backend/photo_album/.env.local
 ```
+
+在 `.env.local` 中填写 `BAIDU_AK`。该文件已被 Git 忽略，不会进入 GitHub 或最终压缩包。生产环境也可以直接设置同名环境变量，环境变量优先于本地文件。
 
 未配置 `BAIDU_AK` 时服务仍能启动，GPS 地址反查会跳过。单文件上传默认最大 20MB。
 

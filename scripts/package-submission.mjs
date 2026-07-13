@@ -124,7 +124,7 @@ for (const file of [
 copyDirectory('backend/tests');
 copy('backend/README.md');
 for (const name of readdirSync(join(root, 'backend', 'photo_album'))) {
-  if (name.endsWith('.py') || name === 'requirements.txt') {
+  if (name.endsWith('.py') || name === 'requirements.txt' || name === '.env.example') {
     copy(`backend/photo_album/${name}`);
   }
 }

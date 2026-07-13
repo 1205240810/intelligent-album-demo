@@ -11,6 +11,7 @@ def create_app(test_config=None):
     app.config.update(
         MAX_CONTENT_LENGTH=MAX_UPLOAD_MB * 1024 * 1024,
         JSON_AS_ASCII=False,
+        CORS_ALLOW_ORIGIN=os.environ.get("CORS_ALLOW_ORIGIN", "*"),
     )
     if test_config:
         app.config.update(test_config)
@@ -23,7 +24,7 @@ def create_app(test_config=None):
 
     @app.after_request
     def add_cors_headers(response):
-        response.headers["Access-Control-Allow-Origin"] = os.environ.get("CORS_ALLOW_ORIGIN", "*")
+        response.headers["Access-Control-Allow-Origin"] = app.config["CORS_ALLOW_ORIGIN"]
         response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
         response.headers["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
         return response

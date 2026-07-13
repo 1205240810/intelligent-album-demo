@@ -21,6 +21,7 @@ pnpm-debug.log*
 /data/raw/
 backend/photo_album/.idea/
 backend/photo_album/.venv/
+backend/photo_album/.env.local
 backend/photo_album/__pycache__/
 backend/photo_album/data/*
 !backend/photo_album/data/.gitkeep

@@ -30,7 +30,11 @@ class PhotoAlbumApiTest(unittest.TestCase):
         routes.USERS_BASE = str(root / "users")
         os.makedirs(routes.USERS_BASE, exist_ok=True)
         routes.stats_mgr = StatsManager(str(root / "data"), routes.USERS_BASE)
-        self.app = create_app({"TESTING": True, "MAX_CONTENT_LENGTH": 2 * 1024 * 1024})
+        self.app = create_app({
+            "TESTING": True,
+            "MAX_CONTENT_LENGTH": 2 * 1024 * 1024,
+            "CORS_ALLOW_ORIGIN": "*",
+        })
         self.client = self.app.test_client()
 
     def tearDown(self):

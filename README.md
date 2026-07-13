@@ -59,12 +59,13 @@ backend/photo_album/.venv/bin/pip install -r backend/photo_album/requirements.tx
 npm run backend:dev
 ```
 
-后端默认监听 <http://127.0.0.1:8080/>。`BAIDU_AK` 为可选配置，未配置时只跳过 GPS 地址反查：
+后端默认监听 <http://127.0.0.1:8080/>。`BAIDU_AK` 为可选配置，未配置时只跳过 GPS 地址反查。开发机可使用不提交 Git 的本地配置：
 
 ```bash
-export BAIDU_AK=你的百度地图AK
-export CORS_ALLOW_ORIGIN=http://127.0.0.1:5173
+cp backend/photo_album/.env.example backend/photo_album/.env.local
 ```
+
+也可以在部署环境直接设置 `BAIDU_AK`、`CORS_ALLOW_ORIGIN` 和 `MAX_UPLOAD_MB`。
 
 复制 `frontend/.env.example` 为 `frontend/.env.local` 后可联调：
 
